@@ -1,0 +1,46 @@
+:host{
+display: block;
+}
+
+/* Banner SVG fallback */
+.banner-image-fallback {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animation for info bar */
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.info-icon {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* Better card transitions */
+.card-transition {
+  transition: all 0.3s ease;
+}
+
+.card-transition:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

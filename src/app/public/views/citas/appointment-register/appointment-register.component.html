@@ -1,0 +1,44 @@
+
+<div class="container">
+  <h2 class="block text-xl font-medium text-gray-700 mb-5">Registro de citas</h2>
+ 
+ 
+  
+
+     
+    <div class="gap-5 flex items-center w-full mb-3">
+      <app-search class="w-full" [setSelectedOption]="true" [selectData]="selectPatient" (search)="searchPatient($event)"></app-search>
+
+   <app-search class="w-full" [setSelectedOption]="true" [selectData]="selectSpe"></app-search>
+
+    </div>
+
+    <!-- <h2 class="mt-3 block text-sm font-medium text-gray-700 mb-1">Por favor seleccione el lugar</h2> -->
+
+    
+
+
+<div class="col-6">
+  <h2 class="block text-sm font-medium text-gray-700 mb-1">Selecciole la fecha en la que desea la cita</h2>
+<div class="flex gap-4 items-center">
+
+  <app-date-picker class="" ></app-date-picker>
+  <app-time-picker></app-time-picker>
+</div>
+
+</div>
+
+
+<button
+  (click)="sendInfo()"
+  [disabled]="!(spe && date && centerName && patient)"
+>
+  Aceptar
+</button>
+
+<!-- <app-doctor-available-list
+  [appmentSelect]="AppmentRes"
+  *ngIf="AppmentRes"
+  (appmentRes)="appointmentResponse($event)"
+></app-doctor-available-list>
+</div> -->

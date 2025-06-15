@@ -1,0 +1,22 @@
+input{
+box-sizing: border-box;
+margin: 0;
+font-family: inherit;
+display: block;
+width: 100%;
+font-weight: 400;
+color: #495057;
+background-color: #fff;
+background-clip: padding-box;
+border: .06667rem solid #dcdfe3;
+transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+height: calc(1.5em + 1.20134rem);
+padding: .534rem .8rem;
+font-size: 1rem;
+line-height: 1.5;
+border-radius: .2rem;
+margin-bottom: 0 !important;
+margin-top: 1.0rem !important;
+
+
+}

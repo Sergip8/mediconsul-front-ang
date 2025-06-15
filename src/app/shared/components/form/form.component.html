@@ -1,0 +1,175 @@
+<div [class]="nestingLevel > 0 ? 'mt-6 p-3 sm:p-6 bg-sky-50 rounded-lg border border-sky-100' : ''">
+  <!-- Section Title for nested forms -->
+  <div *ngIf="sectionTitle && nestingLevel > 0" class="mb-4 pb-2 border-b border-sky-200">
+    <h3 class="text-base sm:text-lg font-medium text-sky-900">{{ sectionTitle }}</h3>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Standard form fields -->
+    <div *ngFor="let key of fieldKeys">
+      <ng-container *ngIf="!nestedObjects[key] && key !== 'sectionTitle' && !key.endsWith('id')">
+        <div class="mb-4 sm:mb-5">
+          <!-- Label -->
+          <label [for]="key" class="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-sky-900">
+            {{ getFieldLabel(key) }}
+            <span *ngIf="formConfig[key].required" class="text-red-500">*</span>
+          </label>
+
+          <!-- Text, Email, Password, Number, Tel, URL inputs -->
+          <ng-container *ngIf="
+            getFieldType(key) === fieldTypes.TEXT || 
+            getFieldType(key) === fieldTypes.EMAIL || 
+            getFieldType(key) === fieldTypes.PASSWORD || 
+            getFieldType(key) === fieldTypes.NUMBER || 
+            getFieldType(key) === fieldTypes.TEL ||
+            getFieldType(key) === fieldTypes.URL ||
+            getFieldType(key) === fieldTypes.DATE ||
+            getFieldType(key) === fieldTypes.TIME
+          ">
+            <input 
+              [type]="getFieldType(key)" 
+              [formControlName]="key" 
+              [id]="key"
+              class="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              [ngClass]="{
+                'border-sky-200': !isFieldInvalid(key),
+                'border-red-300 bg-red-50': isFieldInvalid(key)
+              }"
+              [placeholder]="formConfig[key].placeholder || ''"
+              [min]="formConfig[key].min"
+              [max]="formConfig[key].max"
+              [step]="formConfig[key].step"
+            >
+          </ng-container>
+
+          <!-- Textarea -->
+          <ng-container *ngIf="getFieldType(key) === fieldTypes.TEXTAREA">
+            <textarea 
+              [formControlName]="key" 
+              [id]="key"
+              rows="3"
+              class="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              [ngClass]="{
+                'border-sky-200': !isFieldInvalid(key),
+                'border-red-300 bg-red-50': isFieldInvalid(key)
+              }"
+              [placeholder]="formConfig[key].placeholder || ''"
+            ></textarea>
+          </ng-container>
+
+          <!-- Select Dropdown -->
+          <ng-container *ngIf="getFieldType(key) === fieldTypes.SELECT">
+            <select 
+              [formControlName]="key" 
+              [id]="key"
+              class="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              [ngClass]="{
+                'border-sky-200': !isFieldInvalid(key),
+                'border-red-300 bg-red-50': isFieldInvalid(key)
+              }"
+            >
+              <option value="" disabled selected>{{ formConfig[key].placeholder || 'Select an option' }}</option>
+              <option *ngFor="let option of formConfig[key].options" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </ng-container>
+
+          <!-- Checkbox -->
+          <ng-container *ngIf="getFieldType(key) === fieldTypes.CHECKBOX">
+            <div class="flex items-center">
+              <input 
+                type="checkbox" 
+                [formControlName]="key" 
+                [id]="key"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-blue-500 border-sky-200 rounded focus:ring-blue-500"
+              >
+              <label [for]="key" class="ml-2 text-xs sm:text-sm text-sky-800">{{ formConfig[key].checkboxLabel || getFieldLabel(key) }}</label>
+            </div>
+          </ng-container>
+
+          <!-- Radio Button Group -->
+          <ng-container *ngIf="getFieldType(key) === fieldTypes.RADIO">
+            <div class="space-y-1 sm:space-y-2">
+              <div *ngFor="let option of formConfig[key].options; let i = index" class="flex items-center">
+                <input 
+                  type="radio" 
+                  [formControlName]="key" 
+                  [value]="option.value" 
+                  [id]="key + i"
+                  class="w-3 h-3 sm:w-4 sm:h-4 text-blue-500 border-sky-200 focus:ring-blue-500"
+                >
+                <label [for]="key + i" class="ml-2 text-xs sm:text-sm text-sky-800">{{ option.label }}</label>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- File Input -->
+          <ng-container *ngIf="getFieldType(key) === fieldTypes.FILE">
+            <div class="flex items-center justify-center w-full">
+              <label [for]="key" class="flex flex-col items-center justify-center w-full h-24 sm:h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-sky-50 transition"
+                     [ngClass]="{
+                       'border-sky-200': !isFieldInvalid(key),
+                       'border-red-300 bg-red-50': isFieldInvalid(key)
+                     }">
+                <div class="flex flex-col items-center justify-center pt-3 pb-4 sm:pt-5 sm:pb-6">
+                  <svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 sm:mb-3 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                  <p class="mb-1 text-xs sm:text-sm text-sky-700">
+                    <span class="font-semibold">Click to upload</span> or drag and drop
+                  </p>
+                  <p class="text-xs text-sky-500 hidden sm:block">{{ formConfig[key].fileType || 'Any file type' }}</p>
+                </div>
+                <input [id]="key" type="file" class="hidden" [formControlName]="key">
+              </label>
+            </div>
+          </ng-container>
+
+          <!-- Validation Error -->
+          <div *ngIf="isFieldInvalid(key)" class="mt-1 text-xs text-red-500">
+            {{ getErrorMessage(key) }}
+          </div>
+
+          <!-- Help Text -->
+          <div *ngIf="formConfig[key].helpText" class="mt-1 text-xs text-sky-600">
+            {{ formConfig[key].helpText }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Nested Objects - Using grid layout for larger screens -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <ng-container *ngFor="let key of getNestedObjectKeys()">
+        <app-form
+          [formConfig]="nestedObjects[key].config"
+          [formData]="nestedObjects[key].data"
+          [sectionTitle]="getSectionTitle(key)"
+          [nestingLevel]="nestingLevel + 1"
+          [submitButtonText]="''"
+          [showCancelButton]="false"
+          (formSubmit)="handleNestedFormSubmit(key, $event)"
+          class="col-span-1"
+        ></app-form>
+      </ng-container>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-end mt-4 sm:mt-6 space-y-2 sm:space-y-0 sm:space-x-3" *ngIf="nestingLevel === 0 || submitButtonText">
+      <button 
+        *ngIf="showCancelButton"
+        type="button" 
+        class="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-sky-700 bg-white border border-sky-300 rounded-md shadow-sm hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mb-2 sm:mb-0"
+        (click)="onCancel()"
+      >
+        {{ cancelButtonText }}
+      </button>
+      <button 
+        type="submit" 
+        class="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        {{ submitButtonText }}
+      </button>
+    </div>
+  </form>
+</div>

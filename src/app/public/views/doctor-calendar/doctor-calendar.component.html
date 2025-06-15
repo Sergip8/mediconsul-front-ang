@@ -1,0 +1,15 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold text-blue-600 mb-4">Appointment Calendar</h1>
+    <app-loading *ngIf="loading" ></app-loading>
+    @if (appointmentData.length >0) {
+        <app-calendar 
+          [appointments]="appointmentData"
+          [startDate]="startDate"
+          [numberOfDays]="7"
+          [slotDurationMinutes]="30"
+        ></app-calendar>
+
+    }
+
+   
+  </div>

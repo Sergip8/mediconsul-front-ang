@@ -1,0 +1,87 @@
+<header class="bg-gradient-to-r from-blue-50 to-blue-100 shadow-md">
+   <div class="container mx-auto px-4">
+     <div class="flex items-center justify-between h-20">
+       <!-- Logo (Right side on mobile, left on desktop) -->
+       <div class="flex order-2 md:order-1">
+         <a href="/" class="flex items-center">
+           <img src="assets/images/logo.svg" alt="MediConsult Logo" class="h-10 w-auto" />
+           <span class="ml-2 text-blue-800 font-semibold text-xl">MediConsult</span>
+         </a>
+       </div>
+ 
+       <!-- Navigation Menu (Center) - Hidden on mobile -->
+       <nav class="hidden md:flex space-x-6 md:order-2">
+         <ng-container *ngFor="let item of menuItems">
+           <a [routerLink]="item.link" 
+              class="text-blue-700 hover:text-blue-900 px-2 py-1 text-sm font-medium hover:bg-blue-200 rounded-md transition duration-150">
+             {{item.name}}
+           </a>
+         </ng-container>
+       </nav>
+ 
+       <!-- Auth Links (Left side on mobile, right on desktop) -->
+       <div class="flex items-center space-x-4 order-1 md:order-3">
+        @if (!emailRoles?.roles) {
+            <div>
+              <a  [routerLink]="commonService.prepareRoute(publicRoutes.Signin)"
+                 class="text-blue-700 hover:text-blue-900 px-4 py-2 text-sm font-medium rounded-md transition duration-150">
+                Sign In
+              </a>
+              <a [routerLink]="commonService.prepareRoute(publicRoutes.Signup)"
+                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md shadow-sm transition duration-150">
+                Sign Up
+              </a>
+
+            </div>
+            
+          }@else {
+            @if (emailRoles.roles.includes("PATIENT")) {
+              
+              <app-user-dropdown [user]="emailRoles" (logout)="logout()" [menuItems]="menuPatientItems"></app-user-dropdown>
+            }
+            @if (emailRoles.roles.includes("DOCTOR")) {
+              <app-user-dropdown [user]="emailRoles"  (logout)="logout()" [menuItems]="menuDoctorItems"></app-user-dropdown>
+            }
+            @if (emailRoles.roles.includes("EMPLOYEE")) {
+              <app-user-dropdown [user]="emailRoles"  (logout)="logout()" [menuItems]="menuEmployeeItems"></app-user-dropdown>
+            }
+            @if (emailRoles.roles.includes("ADMIN")) {
+            <div class="flex items-center space-x-4 order-1 md:order-3">
+              <a [routerLink]="['admin']"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md shadow-sm transition duration-150">
+             Go to dashboard
+           </a>
+           <a (click)="logout()"
+           class="text-blue-red bg-red-50 hover:text-red-900 px-4 py-2 text-sm font-medium rounded-md transition duration-150">
+          Log Out
+            </a>   
+            </div>
+            }
+          }
+        </div>
+ 
+       <!-- Mobile menu button -->
+       <div class="md:hidden order-3 ml-2">
+         <button (click)="toggleMenu()" 
+                 class="bg-blue-100 inline-flex items-center justify-center p-2 rounded-md text-blue-700 hover:text-blue-900 hover:bg-blue-200 focus:outline-none">
+           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+             <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+           </svg>
+         </button>
+       </div>
+     </div>
+ 
+     <!-- Mobile dropdown menu -->
+     <div class="md:hidden" [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen}">
+       <div class="pt-2 pb-4 space-y-1 bg-blue-50 rounded-lg shadow-lg absolute left-0 right-0 z-10 mx-4 px-2 py-3 border border-blue-100">
+         <ng-container *ngFor="let item of menuItems">
+           <a [routerLink]="item.link" 
+              class="block text-blue-700 hover:text-blue-900 hover:bg-blue-200 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+             {{item.name}}
+           </a>
+         </ng-container>
+       </div>
+     </div>
+   </div>
+ </header>

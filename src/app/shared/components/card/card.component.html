@@ -1,0 +1,81 @@
+<div  [ngClass]="getCardClasses()">
+    <!-- Card Header with Image -->
+    <div *ngIf="cardData.imageSrc" class="relative">
+      <img [src]="cardData.imageSrc" [alt]="cardData.imageAlt || ''" class="w-full h-48 object-cover object-center">
+      
+      <!-- Type Badge -->
+      <div class="absolute top-0 right-0 text-white text-xs font-bold px-3 py-1 rounded-bl-lg"
+           [ngClass]="{
+             'bg-blue-500': cardData.cardType === 'service',
+             'bg-blue-700': cardData.cardType === 'doctor',
+             'bg-blue-400': cardData.cardType === 'info',
+             'bg-blue-600': cardData.cardType === 'appointment'
+           }">
+        {{cardData.cardType | uppercase}}
+      </div>
+      
+      <!-- Featured Badge -->
+      <div *ngIf="cardData.featured" class="absolute top-0 left-0 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg">
+        FEATURED
+      </div>
+    </div>
+    
+    <!-- Card Content -->
+    <div class="p-5">
+      <h3 [ngClass]="getTitleClasses()">{{cardData.title}}</h3>
+      
+      <p *ngIf="cardData.subtitle" 
+         [ngClass]="{
+           'text-blue-600': cardData.cardType === 'service',
+           'text-blue-700': cardData.cardType === 'doctor',
+           'text-blue-500': cardData.cardType === 'info',
+           
+           'text-sm mb-3': true
+         }">
+        {{cardData.subtitle}}
+      </p>
+      
+      <!-- Rating (Doctors only) -->
+      <div *ngIf="cardData.rating && cardData.cardType === 'doctor'" class="flex items-center mb-3">
+        <div class="flex">
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <svg class="w-4 h-4" [ngClass]="star <= cardData.rating! ? 'text-yellow-500' : 'text-gray-300'" 
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </ng-container>
+        </div>
+        <span class="text-xs text-gray-600 ml-2">{{cardData.rating}}/5</span>
+      </div>
+      
+      <p [ngClass]="{
+           'text-gray-600': cardData.cardType === 'service' || cardData.cardType === 'doctor',
+           'text-gray-700': cardData.cardType === 'info',
+           
+           'mb-4': true
+         }">
+        {{cardData.description}}
+      </p>
+      
+      <!-- Tags -->
+      <div *ngIf="cardData.tags && cardData.tags.length > 0" class="flex flex-wrap gap-2 my-3">
+        <span *ngFor="let tag of cardData.tags" 
+              class="px-2 py-1 text-xs rounded-full"
+              [ngClass]="{
+                'bg-blue-100 text-blue-700': cardData.cardType === 'service',
+                'bg-blue-50 text-blue-800': cardData.cardType === 'doctor',
+                'bg-blue-200 text-blue-700': cardData.cardType === 'info',
+                'bg-blue-100 text-blue-600': cardData.cardType === 'appointment'
+              }">
+          {{tag}}
+        </span>
+      </div>
+      
+      <!-- Card Footer with Link -->
+      <div *ngIf="cardData.linkText && cardData.linkUrl" class="mt-4">
+        <a [routerLink]="cardData.linkUrl" [ngClass]="getButtonClasses()">
+          {{cardData.linkText}}
+        </a>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,41 @@
+
+
+@if (tableData) {
+    <app-table 
+      [columns]="patientColumns"
+      [data]="tableData"
+      [loading]="loading"
+      [title]="'Patient Appointments'"
+      [pagination]="pagination"
+      (rowClick)="onPatientClick($event)"
+      (sortChange)="onSortChange($event)">
+    </app-table>
+}
+
+
+
+
+<app-modal [isOpen]="isModalOpen" [title]="modalTitle" (closeModal)="closeModal()">
+  <app-loading *ngIf="loading"></app-loading>
+  <div class="p-6 ">
+    @if (patientData && patientFormConfig) {
+        <h1 class="text-2xl font-bold text-blue-900 mb-6"></h1>
+        <div class="max-w-3xl mx-auto p-6">
+          <h2 class="text-2xl font-bold text-sky-900 mb-6">Patient Information</h2>
+          
+          <app-form
+            [formConfig]="patientFormConfig"
+            [formData]="patientData"
+            submitButtonText="Save Patient Data"
+            (formSubmit)="onFormSubmit($event)"
+            (formCancel)="onFormCancel($event)"
+          ></app-form>
+        
+        </div>
+    
+      }
+      
+      </div>
+ 
+  </app-modal>
+   

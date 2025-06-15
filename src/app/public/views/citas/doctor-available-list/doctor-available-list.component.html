@@ -1,0 +1,21 @@
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">nombre</th>
+        <th scope="col">especialización</th>
+        <th scope="col">consultorio</th>
+        <th scope="col">fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let select of appmentSelect">
+        <td>{{select.firstname}} {{select.lastname}}</td>
+        <td>{{select.specialization}}</td>
+        <td>{{select.numberRoom}}</td>
+        <td>{{select.response}}</td>
+        <td><button (click)="sendSelection(select)" [disabled]="flag">
+            Seleccionar
+        </button> </td>
+      </tr>
+    </tbody>
+  </table>

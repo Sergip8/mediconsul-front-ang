@@ -1,0 +1,15 @@
+@if (tableData) {
+    <app-table 
+      [columns]="patientColumns"
+      [data]="tableData"
+      [loading]="loading"
+      [title]="'Patient Appointments'"
+      [pagination]="pagination"
+      (rowClick)="onPatientClick($event)"
+      (sortChange)="onSortChange($event)"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+      (onCheckbox)="onCheckbox($event)"
+      >
+    </app-table>
+}

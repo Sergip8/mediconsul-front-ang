@@ -1,0 +1,15 @@
+@if (patientData && patientFormConfig) {
+  <div class="max-w-3xl mx-auto p-6">
+      <h2 class="text-2xl font-bold text-sky-900 mb-6">Patient Information</h2>
+      
+      <app-form
+        [formConfig]="patientFormConfig"
+        [formData]="patientData"
+  
+        submitButtonText="Save Patient Data"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      ></app-form>
+    </div>
+
+}

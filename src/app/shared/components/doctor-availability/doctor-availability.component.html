@@ -1,0 +1,35 @@
+<div class="flex flex-col justify-center">
+  <ng-content>
+
+  </ng-content>
+  <div class="p-4 gap-4" [ngClass]="{'grid grid-cols-3 ':visibleDays.length>1}">
+      <div *ngFor="let day of visibleDays" class="flex flex-col">
+        <div class="mb-2 pb-2 border-b border-gray-200 font-medium text-center text-gray-700">
+          {{ day.dayName }}, {{ day.dayNumber }} {{ day.month }}
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            *ngFor="let slot of daySlots[day.id] | slice:0:slc"
+            (click)="handleSelectSlot(day, slot)"
+            [disabled]="!slot.available"
+            [ngClass]="{
+              'bg-blue-100 text-blue-700 hover:bg-blue-200': slot.available,
+              'bg-gray-100 text-gray-400 cursor-not-allowed': !slot.available
+            }"
+            class="py-2 px-3 text-sm rounded-md text-center transition-colors"
+          >
+            {{ slot.time }}
+          </button>
+          
+          <div *ngIf="daySlots[day.id]?.length === 0" class="col-span-2 text-center py-4 text-gray-500">
+            No available slots
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+    </div>
+
+    <button [innerHTML]="btnHide" (click)="showSlots()">^</button>
+</div>

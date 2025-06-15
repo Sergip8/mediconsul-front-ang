@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-blue-50 px-4">
+    <div class="text-center">
+      <div class="mb-8">
+        <span class="text-9xl font-bold text-blue-500">404</span>
+      </div>
+      
+      <h1 class="text-3xl font-bold text-blue-800 mb-4">Page Not Found</h1>
+      
+      <p class="text-blue-600 mb-8 max-w-md mx-auto">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button 
+          (click)="goToDashboard()" 
+          class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="bi bi-columns-gap"></i>
+          <span>Go to Dashboard</span>
+        </button>
+        
+        <button 
+          (click)="goBack()" 
+          class="px-6 py-3 border border-blue-300 bg-white text-blue-700 rounded-md hover:bg-blue-50 transition-colors shadow-sm flex items-center justify-center gap-2">
+          <i class="bi bi-arrow-left"></i>
+          <span>Go Back</span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="mt-12 text-blue-400">
+      <p>If you believe this is an error, please contact the system administrator.</p>
+    </div>
+  </div>

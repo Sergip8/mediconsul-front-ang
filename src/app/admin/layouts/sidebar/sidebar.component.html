@@ -1,0 +1,121 @@
+<aside class="bg-blue-50 border-r border-blue-200 h-screen w-64 shadow-sm transition-all duration-300">
+    <div class="md:block hidden p-4">
+        <a href="/" class="flex items-center">
+            <img src="assets/images/logo.svg" alt="MediConsult Logo" class="h-10 w-auto" />
+            <span class="ml-2 text-blue-800 font-semibold text-xl">MediConsult</span>
+          </a>
+    </div>
+    <ul class="menu-links space-y-1 mt-6 px-3">
+        <li>
+            <a [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Dashboard)"
+                routerLinkActive="bg-blue-200 text-blue-800" class="menu-item flex items-center gap-3 px-4 py-3 rounded-md text-blue-700 hover:bg-blue-100 transition-colors" ariaCurrentWhenActive="page">
+                <i class="bi bi-columns-gap"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="menu-item sub-menu flex items-center justify-between px-4 py-3 rounded-md text-blue-700 hover:bg-blue-100 transition-colors" aria-expanded="false"
+                (click)="subMenuToggleHandler($event, 'registers')">
+                <div class="flex items-center gap-3">
+                    <svg class="fill-blue-700" width="22" height="23px" xmlns="http://www.w3.org/2000/svg">
+                        <path [attr.transform]="rotateArrow.includes('registers') ? 'rotate(90 10 10)' : ''" d="M8.578 16.359l4.594-4.594-4.594-4.594 1.406-1.406 6 6-6 6z"></path>
+                    </svg>
+                    <span>Registers</span>
+                </div>
+            </a>
+            <ul class="sub-menu-item pl-8 mt-1 space-y-1" [ngClass]="{'hidden': !rotateArrow.includes(adminRoutes.Registers)}">
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Users)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Users}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Patients)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Patients}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Doctors)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Doctors}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Citas)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Citas}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Consulting)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Consulting}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Registers, elementRoutes.Medicaments)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>{{elementRoutes.Medicaments}}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="menu-item sub-menu flex items-center justify-between px-4 py-3 rounded-md text-blue-700 hover:bg-blue-100 transition-colors" aria-expanded="false"
+                (click)="subMenuToggleHandler($event, 'settings')">
+                <div class="flex items-center gap-3">
+                    <svg class="fill-blue-700" width="19" height="23px" xmlns="http://www.w3.org/2000/svg">
+                        <path [attr.transform]="rotateArrow.includes('settings') ? 'rotate(90 10 10)' : ''" d="M8.578 16.359l4.594-4.594-4.594-4.594 1.406-1.406 6 6-6 6z"></path>
+                    </svg>
+                    <span>Settings</span>
+                </div>
+            </a>
+            <ul class="sub-menu-item pl-8 mt-1 space-y-1" [ngClass]="{'hidden': !rotateArrow.includes('settings')}">
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Settings, settingRoutes.Profile)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors"
+                        [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Settings, settingRoutes.Users)"
+                        routerLinkActive="bg-blue-200 text-blue-800" ariaCurrentWhenActive="page">
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="menu-item block px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition-colors" ariaCurrentWhenActive="page">
+                        <span>Website</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-md text-blue-700 hover:bg-blue-100 transition-colors">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<div class="collapsible-btn-container md:block hidden">
+    <button id="sidebar-collapse-btn" sidebarCollapse class="bg-blue-100 hover:bg-blue-200 rounded-r-md border-r border-t border-b border-blue-200">
+        <div class="w-6 h-16 flex justify-center items-center">
+            <div class="collapsible-icons">
+                <div class="collapsible-top-icon bg-blue-700"></div>
+                <div class="collapsible-bottom-icon bg-blue-700"></div>
+            </div>
+        </div>
+    </button>
+</div>
