@@ -4,7 +4,7 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { InformacionMedica, InformacionPersonal, Patient, PatientTable, SearchParameters } from '../../../models/patient';
 import { AlertType } from '../../../shared/components/alert/alert.type';
 import { PatientService } from '../../../_core/services/patient.service';
-import { patientColumns, patientFormSchema } from '../../../_core/schemas/patient-form-schema';
+
 import { Pagination } from '../../../shared/components/pagination/pagination-model';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { finalize } from 'rxjs';
@@ -13,6 +13,7 @@ import { PersonalInfoService } from '../../../_core/services/personal-info.servi
 import { MedicalInfoService } from '../../../_core/services/medical-info.service';
 import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { NgIf } from '@angular/common';
+import { patientColumns, patientFormSchema } from '../../../_core/schemas/patient-form-schema';
 
 @Component({
   selector: 'app-patients',

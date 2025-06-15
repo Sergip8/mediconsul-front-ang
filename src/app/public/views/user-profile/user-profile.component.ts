@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormComponent } from '../../../shared/components/form/form.component';
-import { patientFormSchema } from '../../../_core/schemas/patient-form-schema';
+
 import { Patient } from '../../../models/patient';
 import { PatientService } from '../../../_core/services/patient.service';
 import { AuthService } from '../auth/auth.service';
@@ -10,6 +10,7 @@ import { CommonService } from '../../../_core/services/common.service';
 import { Role } from '../auth/auth-models';
 import { doctorFormSchema } from '../../../_core/schemas/doctor-form-schema';
 import { DoctorService } from '../../../_core/services/doctor.service';
+import { patientFormSchema } from '../../../_core/schemas/patient-form-schema';
 
 @Component({
   selector: 'app-user-profile',
