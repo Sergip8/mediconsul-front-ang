@@ -1,5 +1,5 @@
 <div>
-  <div #alertElement *ngIf="show" [@slideDown] [ngClass]="alertTypeClass()" class="alert">
+  <div #alertElement *ngIf="show" [@slideDown] [ngClass]="alertTypeClass()" class="alert p-5">
     <p>{{message}}</p>
     <span (click)="dismissHandler()" *ngIf="dismissible" class="alert-dismiss">
       <svg class="bi bi-x" fill="currentColor" height="16" viewBox="0 0 16 16" width="16"

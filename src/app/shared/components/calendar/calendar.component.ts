@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { AppointmentDetail, AppointmentDoctorDetail } from '../../../models/cita';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { AppointmentDoctorDetail } from '../../../models/cita';
 import { LoadingComponent } from '../loading/loading';
-
-
 
 interface TimeSlot {
   hour: number;
@@ -18,30 +16,47 @@ interface CalendarSlot {
   isHovered: boolean;
 }
 
+export interface DateRange {
+  startDate: Date;
+  endDate: Date;
+}
+
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, LoadingComponent],
+  imports: [CommonModule],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnChanges {
   @Input() appointments: AppointmentDoctorDetail[] = [];
   @Input() startDate: Date = new Date();
   @Input() numberOfDays: number = 7;
-  @Input() slotDurationMinutes: number = 30;
+  @Input() slotDurationMinutes: number = 20;
   @Input() dayStartHour: number = 8; // 8 AM
   @Input() dayEndHour: number = 18; // 6 PM
+
+  @Output() dateRangeChanged = new EventEmitter<DateRange>();
 
   days: Date[] = [];
   timeSlots: TimeSlot[] = [];
   calendarGrid: CalendarSlot[][] = [];
   hoveredSlot: CalendarSlot | null = null;
   currentViewStartDate: Date = new Date();
+  
   constructor() {}
 
   ngOnInit(): void {
     this.currentViewStartDate = new Date(this.startDate);
     this.refreshCalendarView();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['appointments'] && !changes['appointments'].firstChange) {
+      this.populateAppointments();
+    }
+    if (changes['appointment_start_time'] && !changes['appointment_start_time'].firstChange) {
+      this.currentViewStartDate = new Date(this.startDate);
+      this.refreshCalendarView();
+    }
   }
 
   refreshCalendarView(): void {
@@ -56,6 +71,7 @@ export class CalendarComponent implements OnInit {
     newStartDate.setDate(newStartDate.getDate() - this.numberOfDays);
     this.currentViewStartDate = newStartDate;
     this.refreshCalendarView();
+    this.emitDateRange();
   }
 
   navigateNext(): void {
@@ -63,17 +79,31 @@ export class CalendarComponent implements OnInit {
     newStartDate.setDate(newStartDate.getDate() + this.numberOfDays);
     this.currentViewStartDate = newStartDate;
     this.refreshCalendarView();
+    this.emitDateRange();
   }
 
   navigateToday(): void {
     this.currentViewStartDate = new Date();
     this.refreshCalendarView();
+    this.emitDateRange();
+  }
+
+  private emitDateRange(): void {
+    if (this.days.length > 0) {
+      const startDate = new Date(this.days[0]);
+      const endDate = new Date(this.days[this.days.length - 1]);
+      
+      this.dateRangeChanged.emit({
+        startDate,
+        endDate
+      });
+    }
   }
 
   generateDays(): void {
     this.days = [];
     const currentDate = new Date(this.currentViewStartDate);
-    
+    console.log(currentDate);
     for (let i = 0; i < this.numberOfDays; i++) {
       this.days.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -122,7 +152,8 @@ export class CalendarComponent implements OnInit {
         slot.appointment = undefined;
       });
     });
-
+    console.log(this.appointments);
+    if(this.appointments.length === 0) return;
     this.appointments.forEach(appointment => {
       const appointmentDate = new Date(appointment.appointment_start_time);
       const dayIndex = this.days.findIndex(day => 
@@ -147,6 +178,7 @@ export class CalendarComponent implements OnInit {
         this.calendarGrid[slotIndex][dayIndex].appointment = appointment;
       }
     });
+    console.log(this.calendarGrid);
   }
 
   onSlotMouseEnter(rowIndex: number, colIndex: number): void {
@@ -162,7 +194,7 @@ export class CalendarComponent implements OnInit {
   getSlotStateClass(slot: CalendarSlot): string {
     if (!slot.appointment) return '';
     
-    switch (slot.appointment.state) {
+    switch (slot.appointment.status) {
       case 'Agendada': return 'bg-blue-200';
       case 'completed': return 'bg-green-200';
       case 'cancelled': return 'bg-red-200';

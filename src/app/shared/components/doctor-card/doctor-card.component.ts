@@ -1,20 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DoctorAvailabilityInfo } from '../../../models/doctor';
-
-export interface DoctorInfo {
-  id: number;
-  name: string;
-  specialty: string;
-  qualifications: string[];
-  experience: number;
-  rating: number;
-  totalReviews: number;
-  consultationFee: number;
-  location: string;
-  profileImage: string;
-  languages: string[];
-}
+import { specializationsWithSlots } from '../../utils/constans';
 
 @Component({
   selector: 'app-doctor-card',
@@ -22,8 +9,13 @@ export interface DoctorInfo {
   templateUrl: './doctor-card.component.html',
   styleUrl: './doctor-card.component.css'
 })
-export class DoctorCardComponent {
+export class DoctorCardComponent implements OnInit {
+  ngOnInit(): void {
+    if(this.doctor?.speName)
+    this.slot = specializationsWithSlots.find(spe => spe.specialization == this.doctor.speName)?.slot || 20; // Default to 20 minutes if not found
+  }
 
+  slot = 0
   rating = Math.floor(Math.random() * 5) + 1;
   @Input() doctor!: DoctorAvailabilityInfo
 
@@ -31,5 +23,10 @@ export class DoctorCardComponent {
   get ratingStars(): number[] {
     return Array(5).fill(0).map((_, i) => i < Math.floor(this.rating) ? 1 : 
                               (i < Math.ceil(this.rating) && i >= Math.floor(this.rating)) ? 0.5 : 0);
+  }
+
+  // Format price display
+  get formattedPrice(): string {
+    return `${this.doctor.currency} ${(this.doctor.unitPrice*this.slot*0.1*(110-this.slot)/100).toLocaleString()}`;
   }
 }

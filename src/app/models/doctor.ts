@@ -6,10 +6,10 @@ export class Doctor {
     firstname: string = "";
     identity_number: string = "";
     lastname: string = "";
-    tel: string = "";
+    phone: string = "";
     user_id: number = 0;
     informacion_personal: InformacionPersonal = new InformacionPersonal();
-    Informacion_profesional: InformacionProfesional = new InformacionProfesional()
+    informacion_profesional: InformacionProfesional = new InformacionProfesional()
 
 }
 export class InformacionProfesional{
@@ -22,15 +22,17 @@ export class InformacionProfesional{
 }
 
 export interface DoctorAvailabilityInfo {
-    id: number; // long en C# se convierte a number en TypeScript
+    id: number; 
     documentType: string;
     firstName: string;
     identityNumber: string;
     lastName: string;
-    tel: string;
+    phone: string;
     address: string;
     speName: string
-    citas: CitaDoctor[]; // List<CitaDoctor> en C# se convierte a un array en TypeScript
+    unitPrice: number
+    currency: string
+    citas: CitaDoctor[]; 
   }
   export interface CitaDoctor {
     slot: number; // short en C# se convierte a number en TypeScript
@@ -47,4 +49,13 @@ export interface DoctorAvailabilityInfo {
     pageSize: number = 10
     especializacionId = 4
  }
+ export interface DoctorTable{
+    id: number
+    firstname: string
+    lastname: string
+    document_type: string
+    identity_number: string
+    phone: string
+
+}
  

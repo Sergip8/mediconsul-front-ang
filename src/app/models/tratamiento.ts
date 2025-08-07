@@ -3,9 +3,9 @@ export interface Tratamiento {
     diagnostico_descripcion: string;
     diagnostico_fecha_creacion: string; // O puedes usar `Date` si lo conviertes a un objeto Date
     diagnostico_medicamentoId: number;
-    observaciones: string;
-    cantidad: number;
+    observations: string;
+    quantity: number;
     medicament_name: string;
-    concentracion: string;
-    dosificacion: string;
+    concentration: string;
+    dosage: string;
   }

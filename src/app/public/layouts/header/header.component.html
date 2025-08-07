@@ -21,6 +21,7 @@
  
        <!-- Auth Links (Left side on mobile, right on desktop) -->
        <div class="flex items-center space-x-4 order-1 md:order-3">
+         @if (userState$ | async; as emailRoles) {
         @if (!emailRoles?.roles) {
             <div>
               <a  [routerLink]="commonService.prepareRoute(publicRoutes.Signin)"
@@ -35,16 +36,27 @@
             </div>
             
           }@else {
-            @if (emailRoles.roles.includes("PATIENT")) {
-              
-              <app-user-dropdown [user]="emailRoles" (logout)="logout()" [menuItems]="menuPatientItems"></app-user-dropdown>
-            }
-            @if (emailRoles.roles.includes("DOCTOR")) {
-              <app-user-dropdown [user]="emailRoles"  (logout)="logout()" [menuItems]="menuDoctorItems"></app-user-dropdown>
-            }
-            @if (emailRoles.roles.includes("EMPLOYEE")) {
-              <app-user-dropdown [user]="emailRoles"  (logout)="logout()" [menuItems]="menuEmployeeItems"></app-user-dropdown>
-            }
+  @if (emailRoles.roles.includes("PATIENT")) {
+    <app-user-dropdown 
+      [user]="emailRoles" 
+      (logout)="logout()" 
+      [menuItems]="menuPatientItems">
+    </app-user-dropdown>
+  }
+  @if (emailRoles.roles.includes("DOCTOR")) {
+    <app-user-dropdown 
+      [user]="emailRoles" 
+      (logout)="logout()" 
+      [menuItems]="menuDoctorItems">
+    </app-user-dropdown>
+  }
+  @if (emailRoles.roles.includes("EMPLOYEE")) {
+    <app-user-dropdown 
+      [user]="emailRoles" 
+      (logout)="logout()" 
+      [menuItems]="menuEmployeeItems">
+    </app-user-dropdown>
+  }
             @if (emailRoles.roles.includes("ADMIN")) {
             <div class="flex items-center space-x-4 order-1 md:order-3">
               <a [routerLink]="['admin']"
@@ -57,6 +69,7 @@
             </a>   
             </div>
             }
+          }
           }
         </div>
  

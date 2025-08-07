@@ -48,7 +48,14 @@
            (mouseleave)="onSlotMouseLeave(rowIndex, colIndex)">
         
         <!-- Appointment data if exists -->
-        <div *ngIf="slot.appointment" class="text-xs truncate h-full flex items-center justify-center">
+        <div *ngIf="slot.appointment" class="text-xs truncate h-full flex items-center justify-center "
+        [ngClass]="{
+              'bg-blue-100': slot.appointment.status === 'Scheduled',
+              'bg-green-100': slot.appointment.status === 'Completed',
+              'bg-red-100': slot.appointment.status === 'Cancelled',
+              'bg-yellow-100': slot.appointment.status === 'No-show'
+            }"
+        >
           {{ slot.appointment.patient_firstname }} {{slot.appointment.patient_lastname}}
         </div>
         
@@ -60,11 +67,11 @@
           <div class="mt-1 capitalize">
             Status: 
             <span [ngClass]="{
-              'text-blue-600': slot.appointment.state === 'scheduled',
-              'text-green-600': slot.appointment.state === 'completed',
-              'text-red-600': slot.appointment.state === 'cancelled',
-              'text-yellow-600': slot.appointment.state === 'no-show'
-            }">{{ slot.appointment.state }}</span>
+              'text-blue-600': slot.appointment.status === 'Scheduled',
+              'text-green-600': slot.appointment.status === 'Completed',
+              'text-red-600': slot.appointment.status === 'Cancelled',
+              'text-yellow-600': slot.appointment.status === 'No-show'
+            }">{{ slot.appointment.status }}</span>
           </div>
           <div class="mt-1">Time: {{ slot.appointment.appointment_start_time| date:'short' }}</div>
         </div>

@@ -6,7 +6,7 @@ export class Patient {
     firstname: string = "";
     identity_number: string = "";
     lastname: string = "";
-    tel: string = "";
+    phone: string = "";
     user_id: number = 0;
     informacion_personal: InformacionPersonal = new InformacionPersonal();
     informacion_medica: InformacionMedica = new InformacionMedica();
@@ -16,7 +16,7 @@ export class InformacionPersonal {
     id: number = 0;
     address: string = "";
     birth_date: string = "";
-    e_civil: string = "2020-01-01";
+    marital_status: string = "2020-01-01";
     gender: string = "";
 }
 export class InformacionMedica {
@@ -43,10 +43,10 @@ export interface PatientTable{
     lastName: string
     document_type: string
     identity_number: string
-    tel: string
+    phone: string
 
 }
-export interface UserListRequest{
-    data: PatientTable[] | UserRequest[]
+export interface PaginatedRequest<T>{
+    data: T[]
     totalRecords: number
 }

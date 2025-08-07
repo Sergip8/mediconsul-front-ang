@@ -5,6 +5,9 @@ import { CitaDoctor } from '../../../models/doctor';
 import { CreateCita } from '../../../models/cita';
 import { AuthService } from '../../../public/views/auth/auth.service';
 import { AppointmentService } from '../../../_core/services/citas.service';
+import { ModalComponent } from "../modal/modal.component";
+import { ButtonComponent } from "../../button/button.component";
+import { Router } from '@angular/router';
 
 
 interface TimeSlot {
@@ -22,7 +25,7 @@ export interface AppointmentSelection {
 }
 @Component({
   selector: 'app-doctor-availability',
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent, ButtonComponent],
   templateUrl: './doctor-availability.component.html',
   styleUrl: './doctor-availability.component.css'
 })
@@ -32,15 +35,17 @@ export class DoctorAvailabilityComponent implements OnChanges  {
   @Input() existingAppointments: CitaDoctor[] = [];
   @Input() startHour = 8;
   @Input() endHour = 18;
-  @Output() slotSelected = new EventEmitter<AppointmentSelection>();
+  @Output() slotSelected = new EventEmitter<CreateCita>();
   
   daySlots: {[dayId: number]: TimeSlot[]} = {};
   slc = 10;
   size = 0
   btnHide = "Mostrar más"
   slot = 20
-
-  constructor(private authService: AuthService, private citaService: AppointmentService){}
+  isModalOpen = false
+  modalTitle = ""
+  citaSelected!: CreateCita
+  constructor(private authService: AuthService, private citaService: AppointmentService, private route: Router){}
   
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visibleDays'] || changes['existingAppointments'] || changes['doctorId']) {
@@ -90,17 +95,14 @@ export class DoctorAvailabilityComponent implements OnChanges  {
   }
   
   isSlotBooked(slotTime: Date): boolean {
-    console.log(this.existingAppointments)
     if(this.existingAppointments && this.existingAppointments.length >0)
     // Check if the slot overlaps with any existing appointment
     return this.existingAppointments.some(appointment => {
-      const date =  new Date(appointment.appointment_start_time)
-      const localDate = date.toLocaleString("es-CO", {
-    timeZone: "America/Bogota",
-  })
-      const appointmentStart = new Date(localDate);
+      const date =  new Date(appointment?.appointment_start_time)
+ 
+      const appointmentStart = new Date(date);
       const appointmentEnd = new Date(appointmentStart);
-      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + appointment.slot);
+      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + appointment?.slot);
       
       // Check if slot starts during an existing appointment
       return (slotTime >= appointmentStart && slotTime < appointmentEnd);
@@ -120,16 +122,20 @@ export class DoctorAvailabilityComponent implements OnChanges  {
     if(roles)
       if(roles.includes("PATIENT")){
         const userId = this.authService.getUserId()
+        const localTime = new Date(slot.startTime).toLocaleString("sv-SE", { timeZone: "America/Bogota" }).replace(" ", "T");
+        this.isModalOpen = true
         if(userId){
-          const cita: CreateCita = {
+         
+          this.modalTitle = "desea agendar la cita"
+          this.citaSelected = {
             slot: this.slot,
-            appointmentStartTime: slot.startTime,
+            appointmentStartTime: localTime,
             type: this.doctor.spe,
             doctorId: this.doctor.doctorId,
             userId: userId
           }
-          console.log(cita)
-          this.createAppointment(cita)
+         
+          //this.createAppointment(cita)
 
         }
 
@@ -162,6 +168,18 @@ export class DoctorAvailabilityComponent implements OnChanges  {
     this.citaService.createPatientCita(cita).subscribe({
       next: data => console.log(data)
     })
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
+  handleClickCancel(){
+  this.isModalOpen = false
+  }
+  handleClickAccept(){
+    if(this.citaSelected)
+     this.slotSelected.emit(this.citaSelected)
+    this.isModalOpen = false
   }
 
 }

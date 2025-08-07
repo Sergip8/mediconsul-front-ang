@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Patient, PatientTable, SearchParameters, UserListRequest } from '../../models/patient';
+import { Patient, PatientTable, SearchParameters, PaginatedRequest } from '../../models/patient';
 import {environment} from "../../../environments/environment";
 import { Doctor, DoctorAvailabilityPayload, DoctorAvailabilityRequest } from '../../models/doctor';
 
@@ -16,8 +16,8 @@ export class DoctorService {
     getDoctorAvailability(doctorPayload: DoctorAvailabilityPayload) {
       return this.http.post<DoctorAvailabilityRequest>(baseUrl+'GetDoctorAvailability', doctorPayload )
     }
-      getPagiantedDoctors(params: SearchParameters){
-        return this.http.post<UserListRequest>(baseUrl+ 'GetPaginatedDoctors', params)
+      getPaginatedDoctors(params: SearchParameters){
+        return this.http.post<PaginatedRequest<Doctor>>(baseUrl+ 'GetPaginatedDoctors', params)
       }
 
        getDoctorInfo(doctorId: number){
@@ -26,5 +26,12 @@ export class DoctorService {
         doctorProfileUpdate(doctor: Doctor){
           return this.http.post<Doctor>(baseUrl+'UpdateDoctorProfile', doctor)
         }
+    updateDoctorData(doctor: Doctor){
+          return this.http.post<Doctor>(baseUrl+'UpdateDoctorProfile', doctor)
+        }
+        createDoctor(doctor: Doctor) {
+          return this.http.post<any>(baseUrl+'CreateDoctor', doctor )
+        }
 }
+
 

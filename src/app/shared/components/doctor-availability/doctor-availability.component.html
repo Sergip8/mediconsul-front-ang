@@ -33,3 +33,16 @@
 
     <button [innerHTML]="btnHide" (click)="showSlots()">^</button>
 </div>
+
+
+          <app-modal [isOpen]="isModalOpen" position="top-center" animation="slide-down" [title]="modalTitle" (closeModal)="closeModal()">
+            <div class="flex justify-center gap-3">
+              <app-button variant="secondary" (buttonClick)="handleClickCancel()">
+             Cancelar
+           </app-button>
+             <app-button variant="primary" (buttonClick)="handleClickAccept()">
+             Aceptar
+           </app-button>
+
+            </div>
+          </app-modal>

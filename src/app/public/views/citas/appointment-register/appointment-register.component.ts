@@ -10,7 +10,6 @@ import { SelectComponent } from "../../../../shared/components/select/select-che
 import { PatientService } from '../../../../_core/services/patient.service';
 import { Patient, PatientTable, SearchParameters } from '../../../../models/patient';
 import { patientColumns } from '../../../../_core/schemas/patient-form-schema';
-import { TableComponent } from "../../../../shared/components/table/table.component";
 import { Pagination } from '../../../../shared/components/pagination/pagination-model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePickerComponent } from '../datetime-picker/date-picker.component';
@@ -21,7 +20,7 @@ import { TimePickerComponent } from '../datetime-picker/time-picker.component';
   selector: 'app-appointment-register',
   templateUrl: './appointment-register.component.html',
   styleUrls: ['./appointment-register.component.scss'],
-  imports: [SelectComponent, TableComponent, ReactiveFormsModule, DatePickerComponent, TimePickerComponent]
+  imports: [SelectComponent, ReactiveFormsModule, DatePickerComponent, TimePickerComponent]
 })
 export class AppointmentRegisterComponent {
 loading: boolean = false;

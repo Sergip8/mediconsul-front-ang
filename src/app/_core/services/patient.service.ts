@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Patient, PatientTable, SearchParameters, UserListRequest } from '../../models/patient';
+import { Patient, PatientTable, SearchParameters, PaginatedRequest } from '../../models/patient';
 import {environment} from "../../../environments/environment";
 import { AlertRequest } from '../../shared/components/alert/alert.type';
 
@@ -24,7 +24,7 @@ export class PatientService {
   }
 
   getPagiantedPatients(params: SearchParameters){
-    return this.http.post<UserListRequest>(baseUrl+ 'GetPaginatedPatients', params)
+    return this.http.post<PaginatedRequest<PatientTable>>(baseUrl+ 'GetPaginatedPatients', params)
   }
    updatePatientData(pi: PatientTable){
       return this.http.put<AlertRequest>(baseUrl+ 'UpdatePatient', pi)

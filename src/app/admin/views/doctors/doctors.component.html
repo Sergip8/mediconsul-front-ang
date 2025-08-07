@@ -1,39 +1,33 @@
 @if (tableData) {
-    <app-table 
-      [columns]="doctorColumns"
-      [data]="tableData"
-      [loading]="loading"
-      [title]="'Patient Appointments'"
-      [pagination]="pagination"
-      (rowClick)="onDoctorClick($event)"
-      (sortChange)="onSortChange($event)">
-    </app-table>
+  <app-table
+    [columns]="doctorColumns"
+    [data]="tableData"
+    [loading]="loading"
+    [title]="'Gestión de Doctores'"
+    [pagination]="pagination"
+    (create)="onCreate()"
+    (rowClick)="onDoctorClick($event)"
+    (sortChange)="onSortChange($event)">
+  </app-table>
 }
 
-
-
-
 <app-modal [isOpen]="isModalOpen" [title]="modalTitle" (closeModal)="closeModal()">
-  <div class="p-6 ">
-    @if (doctorData && doctorFormConfig) {
-        <h1 class="text-2xl font-bold text-blue-900 mb-6"></h1>
-        <div class="max-w-3xl mx-auto p-6">
-          <h2 class="text-2xl font-bold text-sky-900 mb-6">Patient Information</h2>
-          
-          <app-form
-            [formConfig]="doctorFormConfig"
-            [formData]="doctorData"
-      
-            submitButtonText="Save Patient Data"
-            (formSubmit)="onFormSubmit($event)"
-            (formCancel)="onFormCancel()"
-          ></app-form>
+  <app-loading *ngIf="loading"></app-loading>
+  
+  @if (doctorFormConfig && isModalOpen) {
+    <div class="p-6">
+      <h1 class="text-2xl font-bold text-blue-900 mb-6"></h1>
+      <div class="max-w-3xl mx-auto p-6">
+        <h2 class="text-2xl font-bold text-sky-900 mb-6">Información del Doctor</h2>
         
-        </div>
-    
-      }
-      
+        <app-form
+          [formConfig]="doctorFormConfig"
+          [formData]="doctorData"
+          submitButtonText="Guardar Datos del Doctor"
+          (formSubmit)="onFormSubmit($event)"
+          (formCancel)="onFormCancel($event)">
+        </app-form>
       </div>
- 
-  </app-modal>
-   
+    </div>
+  }
+</app-modal>

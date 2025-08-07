@@ -5,7 +5,7 @@ export const citaColumns: TableColumn[] = [
     { header: 'Fecha cita', field: 'appointment_start_time', type: 'date', sortable: true, width: 'w-2/12' },
     { header: 'Datos Cita', field: 'response', sortable: false, width: 'w-2/6' },
     { header: 'Especialidad', field: 'type', sortable: true, width: 'w-2/12' },
-    { header: 'Status', field: 'state', type: 'status', sortable: true, width: 'w-2/12' },
+    { header: 'Status', field: 'status', type: 'status', sortable: true, width: 'w-2/12' },
 
   ];
   

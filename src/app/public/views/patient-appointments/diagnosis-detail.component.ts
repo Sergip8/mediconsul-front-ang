@@ -5,7 +5,7 @@ import { Tratamiento } from "../../../models/tratamiento";
 
 @Component({
     selector: 'app-diagnosis-detail',
-    imports: [NgFor, NgIf],
+    imports: [ NgIf],
     template: `
    <div class="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-2xl" *ngIf="diagnosisData">
   <!-- Header -->
@@ -50,18 +50,18 @@ import { Tratamiento } from "../../../models/tratamiento";
           <span class="text-lg font-semibold text-blue-800">{{ diagnosisData.medicament_name }}</span>
         </div>
         <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-          {{ diagnosisData.concentracion }}
+          {{ diagnosisData.concentration }}
         </span>
       </div>
       
       <div class="grid md:grid-cols-3 gap-4 mt-4">
         <div>
           <label class="block text-sm font-medium text-blue-600">Dosificación</label>
-          <p class="mt-1 text-gray-800">{{ diagnosisData.dosificacion }}</p>
+          <p class="mt-1 text-gray-800">{{ diagnosisData.dosage }}</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-blue-600">Cantidad</label>
-          <p class="mt-1 text-gray-800">{{ diagnosisData.cantidad }} unidades</p>
+          <label class="block text-sm font-medium text-blue-600">quantity</label>
+          <p class="mt-1 text-gray-800">{{ diagnosisData.quantity }} unidades</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-blue-600">ID Medicamento</label>
@@ -70,8 +70,8 @@ import { Tratamiento } from "../../../models/tratamiento";
       </div>
       
       <div class="mt-4 pt-3 border-t border-blue-100">
-        <label class="block text-sm font-medium text-blue-600">Observaciones</label>
-        <p class="mt-1 text-gray-700 bg-blue-50 p-2 rounded">{{ diagnosisData.observaciones }}</p>
+        <label class="block text-sm font-medium text-blue-600">observations</label>
+        <p class="mt-1 text-gray-700 bg-blue-50 p-2 rounded">{{ diagnosisData.observations }}</p>
       </div>
     </div>
   </div>

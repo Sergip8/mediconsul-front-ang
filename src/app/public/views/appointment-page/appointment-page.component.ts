@@ -5,10 +5,11 @@ import { DayInfo, DoctorAvailabilityHeader } from '../../../shared/components/do
 import { NgFor, NgIf } from '@angular/common';
 import { DoctorService } from '../../../_core/services/doctor.service';
 import { DoctorAvailabilityPayload, DoctorAvailabilityRequest } from '../../../models/doctor';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../../shared/components/loading/loading';
 import { ServiceUnavailableComponent } from '../unavailable/unavailable.component';
+import { CreateCita } from '../../../models/cita';
 
 @Component({
   selector: 'app-appointment-page',
@@ -26,7 +27,7 @@ export class AppointmentPageComponent implements OnInit {
   visibleDays: DayInfo[] = [];
   doctor!:DoctorAvailabilityRequest
 
-  constructor(private doctorService: DoctorService, private route: ActivatedRoute ){}
+  constructor(private doctorService: DoctorService, private route: ActivatedRoute, private router: Router){}
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('speId')
     const id = Number(idParam)
@@ -55,7 +56,10 @@ export class AppointmentPageComponent implements OnInit {
     this.visibleDays = days;
   }
   
-  onSlotSelected(selection: AppointmentSelection): void {
-    this.appointmentSelected.emit(selection);
+  onSlotSelected(selection: CreateCita): void {
+    selection.doctor = this.doctor.doctores.filter(d => d.id === selection.doctorId)[0]
+    if(selection.doctor)
+      this.router.navigate(["payment"], { state: { cita: selection} });
+    
   }
 }

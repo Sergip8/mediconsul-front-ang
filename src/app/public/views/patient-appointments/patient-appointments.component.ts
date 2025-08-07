@@ -43,7 +43,7 @@ private tratamientoService: TratamientoService){}
       this.appointmentService.getCitas(userId).subscribe({
         next: data =>{
           this.appointmentData =data
-          console.log(this.citas)
+          console.log(data)
         }
       })
 

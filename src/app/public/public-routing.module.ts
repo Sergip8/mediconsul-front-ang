@@ -7,6 +7,7 @@ import { DoctorCalendarComponent } from './views/doctor-calendar/doctor-calendar
 import { AppointmentPageComponent } from './views/appointment-page/appointment-page.component';
 import { ChatFeatureComponent } from './views/chat/chat.component';
 import { AppointmentRegisterComponent } from './views/citas/appointment-register/appointment-register.component';
+import { StripePaymentComponent } from './views/stripe/stripe.component';
 
 
 
@@ -46,6 +47,11 @@ const routes: Routes = [
     path: 'set-appointment',
     title: 'set-appointment',
     component: AppointmentRegisterComponent
+  },
+    {
+    path: 'payment',
+    title: 'payment',
+    component: StripePaymentComponent
   },
 
 

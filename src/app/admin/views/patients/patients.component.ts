@@ -14,6 +14,7 @@ import { MedicalInfoService } from '../../../_core/services/medical-info.service
 import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { NgIf } from '@angular/common';
 import { patientColumns, patientFormSchema } from '../../../_core/schemas/patient-form-schema';
+import { UserService } from '../../../_core/services/user.service';
 
 @Component({
   selector: 'app-patients',
@@ -23,7 +24,7 @@ import { patientColumns, patientFormSchema } from '../../../_core/schemas/patien
 })
 export class PatientsComponent implements OnInit {
 
-    patientFormConfig = patientFormSchema
+    patientFormConfig!: any 
     patientData!: Patient | null
     tableData: PatientTable[] = []
     patientColumns = patientColumns
@@ -47,32 +48,56 @@ export class PatientsComponent implements OnInit {
     constructor(private patient: PatientService,
       private commonService: CommonService,
       private personalInfoService: PersonalInfoService,
-      private medicalInfoService: MedicalInfoService){}
+      private userService: UserService,
+      private medicalInfoService: MedicalInfoService){
+       
+      }
   ngOnInit(): void {
     this.getPatients()
   }
+
     onFormSubmit(formData: any): void {
+      let detectChanges = false
       console.log(this.patientData)
       console.log(formData)
-      const medicalInfo = {id: this.patientData?.informacion_medica.id, ...formData.informacion_medica}
-      const personalInfo = {id: this.patientData?.informacion_personal.id, ...formData.informacion_personal}
-      
-      if (this.hasChanges(this.patientData?.informacion_personal, personalInfo)) {
-        this.updateInformacionPersonal(personalInfo);
+      let medicalInfo = formData.informacion_medica
+      let personalInfo = formData.informacion_personal
+      if(this.patientData){
+        medicalInfo = {id: this.patientData?.informacion_medica.id, ...formData.informacion_medica}
+        personalInfo = {id: this.patientData?.informacion_personal.id, ...formData.informacion_personal}
+        
+        if (this.hasChanges(this.patientData?.informacion_personal, personalInfo)) {
+          detectChanges = true
+          this.updateInformacionPersonal(personalInfo);
+        }
+        
+        if (this.hasChanges(this.patientData?.informacion_medica, medicalInfo)) {
+          detectChanges = true
+          this.updateInformacionMedica(medicalInfo);
+        }
+        const mainFieldsChanged = this.hasChanges(
+          this.excludeNested(this.patientData), 
+          this.excludeNested(formData)
+        );
+        if (mainFieldsChanged) {
+          detectChanges = true
+          this.updateMainData(this.excludeNested(formData));
+        }
+        if(!detectChanges){
+          this.closeModal()
+           this.commonService.updateAlert({
+        message: 'No se realizaron cambios',
+        alertType: AlertType.Warning,
+        show: true
+      });
+        }
+
+
+        
+      }else{
+        this.createPatient(formData)
       }
-    
-      if (this.hasChanges(this.patientData?.informacion_medica, medicalInfo)) {
-        this.updateInformacionMedica(medicalInfo);
-      }
-      const mainFieldsChanged = this.hasChanges(
-        this.excludeNested(this.patientData), 
-        this.excludeNested(formData)
-      );
-      if (mainFieldsChanged) {
-        this.updateMainData(this.excludeNested(formData));
-      }
-   
-        this.isModalOpen = false;
+        
    
 
     }
@@ -91,6 +116,7 @@ export class PatientsComponent implements OnInit {
       if (this.patientData) {
         this.patientData.informacion_personal = { ...currentData };
       }
+      this.isModalOpen = false;
     },
     error: (err) => {
       this.commonService.updateAlert({
@@ -115,6 +141,7 @@ export class PatientsComponent implements OnInit {
       if (this.patientData) {
         this.patientData.informacion_medica = { ...currentData };
       }
+      this.isModalOpen = false;
     },
     error: (err) => {
       this.commonService.updateAlert({
@@ -138,6 +165,7 @@ export class PatientsComponent implements OnInit {
     next: (data) => {
       if (this.patientData) {
         Object.assign(this.patientData, currentData);
+        this.isModalOpen = false;
       }
     },
     error: (err) => {
@@ -174,25 +202,29 @@ export class PatientsComponent implements OnInit {
     getPatients(){
       this.patient.getPagiantedPatients(this.params).subscribe({
         next: data => {
-          this.tableData = <PatientTable[]>data.data
+          console.log(data)
+          this.tableData = data.data
           this.pagination.count = data.totalRecords
+          console.log(this.tableData)
           
         }
       })
     }
     getPatientSelected(patientId: number){
-        this.openModal()
-        this.loading = true
+       
+       
       this.patient.getPatientInfo(patientId).pipe(finalize(()=> this.loading = false)).subscribe({
         next: data => {
+          console.log(data)
           this.patientData = data
-        
+           this.openModal()
         }
       })
     }
 
       onPatientClick(patient: any): void {
         this.patientData = null
+        this.patientFormConfig = patientFormSchema((term) => this.userService.getUserFormData(term))
         this.getPatientSelected(patient.id)
       }
       
@@ -252,8 +284,8 @@ compareObjects(object1: any, object2: any){
   })
 }
 createPatient(formData: any){
+   
     const patient = <Patient>formData
-    patient.user_id = this.userId
     console.log(patient)
     this.patient.createPatient(patient).pipe(
               finalize (() => {
@@ -265,6 +297,7 @@ createPatient(formData: any){
               })
             ).subscribe({
           next: data => {
+            this.isModalOpen = false;
             console.log(data)
               if(data.isError){
                 this.alert = AlertType.Danger
@@ -282,6 +315,10 @@ createPatient(formData: any){
         })
   }
 
-
+onCreate(){
+  this.patientData = null
+  this.patientFormConfig = patientFormSchema((term) => this.userService.getUserFormData(term), false)
+  this.openModal()
+}
 }
 

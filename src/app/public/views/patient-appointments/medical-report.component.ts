@@ -78,12 +78,12 @@ import { PdfExportService } from "../../../_core/services/pdf-export.service";
           <label class="block text-sm font-medium text-blue-600">Estado</label>
           <span class="mt-1 inline-block px-3 py-1 text-sm rounded-full" 
                 [ngClass]="{
-                  'bg-green-100 text-green-800': appointmentData.state === 'Agendada',
-                  'bg-blue-100 text-blue-800': appointmentData.state === 'En espera',
-                  'bg-red-100 text-red-800': appointmentData.state === 'Cancelada',
-                  'bg-gray-100 text-gray-800': appointmentData.state !== 'Agendada' && appointmentData.state !== 'En espera' && appointmentData.state !== 'Cancelada'
+                  'bg-green-100 text-green-800': appointmentData.status === 'Agendada',
+                  'bg-blue-100 text-blue-800': appointmentData.status === 'En espera',
+                  'bg-red-100 text-red-800': appointmentData.status === 'Cancelada',
+                  'bg-gray-100 text-gray-800': appointmentData.status !== 'Agendada' && appointmentData.status !== 'En espera' && appointmentData.status !== 'Cancelada'
                 }">
-            {{ appointmentData.state }}
+            {{ appointmentData.status }}
           </span>
         </div>
         <div>
@@ -136,24 +136,24 @@ import { PdfExportService } from "../../../_core/services/pdf-export.service";
             <span class="text-lg font-semibold text-blue-800">{{ diagnosisData.medicament_name }}</span>
           </div>
           <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-            {{ diagnosisData.concentracion }}
+            {{ diagnosisData.concentration }}
           </span>
         </div>
         
         <div class="grid md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-medium text-blue-600">Dosificación</label>
-            <p class="mt-1 text-gray-800">{{ diagnosisData.dosificacion }}</p>
+            <p class="mt-1 text-gray-800">{{ diagnosisData.dosage }}</p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-blue-600">Cantidad</label>
-            <p class="mt-1 text-gray-800">{{ diagnosisData.cantidad }} unidades</p>
+            <label class="block text-sm font-medium text-blue-600">quantity</label>
+            <p class="mt-1 text-gray-800">{{ diagnosisData.quantity }} unidades</p>
           </div>
         </div>
         
         <div class="mt-4 pt-3 border-t border-blue-100">
-          <label class="block text-sm font-medium text-blue-600">Observaciones</label>
-          <p class="mt-1 text-gray-700 bg-blue-50 p-3 rounded">{{ diagnosisData.observaciones }}</p>
+          <label class="block text-sm font-medium text-blue-600">observations</label>
+          <p class="mt-1 text-gray-700 bg-blue-50 p-3 rounded">{{ diagnosisData.observations }}</p>
         </div>
       </div>
     </div>

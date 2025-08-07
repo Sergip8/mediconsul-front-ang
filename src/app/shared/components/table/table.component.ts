@@ -27,8 +27,9 @@ export class TableComponent {
   @Input() title: string = '';
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  @Output() create = new EventEmitter();
   @Output() onCheckbox  = new EventEmitter<any>();
-  
+  @Output() pageChange  = new EventEmitter<number>();
   @Output() rowClick = new EventEmitter<any>();
   @Output() sortChange = new EventEmitter<{field: string, direction: 'asc' | 'desc'}>();
   
@@ -79,5 +80,8 @@ export class TableComponent {
       default:
         return 'bg-gray-100 text-gray-800';
     }
+  }
+  gotoPage(page: number){
+    this.pageChange.emit(page)
   }
 }

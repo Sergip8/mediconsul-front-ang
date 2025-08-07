@@ -8,6 +8,8 @@
       <div class="relative">
         <img 
           [src]="user.avatar" 
+          (error)="onImageError($event)"
+          (load)="onImageLoad()"
           alt="User avatar" 
           class="h-10 w-10 rounded-full object-cover border-2 border-blue-100"
           onerror="this.src='assets/images/default-avatar.png'"

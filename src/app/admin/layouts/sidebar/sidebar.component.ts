@@ -61,7 +61,7 @@ rotateArrow: string[] = []
       }
     
     const elem = event.target as HTMLElement;
-    const subMenu = elem.closest("a.sub-menu") as Element;
+    const subMenu = elem?.closest("a.sub-menu") as Element;
     
     if (subMenu.getAttribute('aria-expanded') == 'false')
       subMenu.setAttribute('aria-expanded', 'true');
@@ -83,7 +83,7 @@ rotateArrow: string[] = []
         const subMenu = this.elementRef.nativeElement.querySelectorAll(".sub-menu");
         const elem = this.elementRef.nativeElement.querySelector(`[href='${event.url}']`) as Element;
 
-        if (elem.closest('ul.sub-menu-item')) return;
+        if (elem?.closest('ul.sub-menu-item')) return;
 
         subMenu.forEach((subMenu: Element) => {
           if (subMenu.getAttribute('aria-expanded') == 'true')

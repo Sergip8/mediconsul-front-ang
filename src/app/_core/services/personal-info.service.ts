@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { InformacionPersonal, UserListRequest } from '../../models/patient';
+import { InformacionPersonal, PaginatedRequest } from '../../models/patient';
 import {environment} from "../../../environments/environment";
 import { AlertRequest } from '../../shared/components/alert/alert.type';
 

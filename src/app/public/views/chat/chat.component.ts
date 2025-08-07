@@ -9,6 +9,7 @@ import { DayInfo } from '../../../shared/components/doctor-availability/doctor-a
 import { DoctorAvailabilityInfo } from '../../../models/doctor';
 import { AppointmentSelection, DoctorAvailabilityComponent } from "../../../shared/components/doctor-availability/doctor-availability.component";
 import { DoctorCardComponent } from "../../../shared/components/doctor-card/doctor-card.component";
+import { CreateCita } from '../../../models/cita';
 
 
 export interface ChatMessage {
@@ -158,7 +159,7 @@ export class ChatFeatureComponent {
         }
     })
   }
-    onSlotSelected(selection: AppointmentSelection): void {
+    onSlotSelected(selection: CreateCita): void {
       console.log(selection)
     }
 }

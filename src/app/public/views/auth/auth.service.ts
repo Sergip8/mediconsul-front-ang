@@ -8,10 +8,20 @@ import { AlertRequest } from '../../../shared/components/alert/alert.type';
 
 const baseUrl = environment.baseUrl
 
+export interface UserMenu {
+   
+    email: string,
+    roles: string[],
+    avatar: string
+  };
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  getUserName() {
+    return ""
+  }
   private endpoints: any = {
     signin: baseUrl+"Login",
     signup: baseUrl+"Register",

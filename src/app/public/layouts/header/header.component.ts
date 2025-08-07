@@ -3,15 +3,16 @@ import { Router, RouterLink } from '@angular/router';
 
 import { PublicRoutes } from '../../public.routes';
 
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { CommonService } from '../../../_core/services/common.service';
 import { UserDropdownComponent } from '../../../shared/components/user-dropdown/user-dropdown.component';
-import { AuthService } from '../../views/auth/auth.service';
+import { AuthService, UserMenu } from '../../views/auth/auth.service';
+import { combineLatest, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'public-header',
   standalone: true,
-  imports: [RouterLink, NgIf, NgClass, NgFor, UserDropdownComponent],
+  imports: [RouterLink, NgIf, NgClass, NgFor, UserDropdownComponent, AsyncPipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -19,17 +20,29 @@ export class PublicHeaderComponent implements OnInit, OnDestroy {
 
   readonly publicRoutes = PublicRoutes;
 
-  emailRoles:{roles: string[], email: string, avatar: string} = {
-    roles : [],
-    email: "",
-    avatar: 'assets/images/avatar.png'
+ 
+  userState$: Observable<UserMenu> 
+  constructor(
+    public readonly commonService: CommonService, 
+    public authService: AuthService, 
+    private route: Router
+  ) {
+
+    this.userState$ = combineLatest([
+     this.authService.roles$,
+     this.authService.email$,
+     "assets/images/avatar.png"
+   ]).pipe(
+     map(([roles, email, avatar]) => ({
+       roles: roles ?? this.authService.getRole(),
+       email: email ?? this.authService.getEmail(),
+       avatar: avatar ?? 'assets/images/avatar.png'
+     }))
+   );
+
   }
 
-  constructor( public readonly commonService: CommonService, public authService: AuthService , private route: Router) {
-   authService.roles$.subscribe(r => this.emailRoles.roles = r ?? authService.getRole())
-   authService.email$.subscribe(r => this.emailRoles.email = r ?? authService.getEmail())
-   console.log(this.emailRoles)
-  }
+
   ngOnDestroy(): void {
     
   }

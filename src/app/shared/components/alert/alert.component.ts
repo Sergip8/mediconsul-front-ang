@@ -7,7 +7,7 @@ import { CommonService } from '../../../_core/services/common.service';
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [CommonModule, AsyncPipe],
+  imports: [CommonModule],
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.css'],
   animations: [slideDown]

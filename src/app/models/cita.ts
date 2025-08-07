@@ -1,9 +1,11 @@
+import { DoctorAvailabilityInfo } from "./doctor"
+
 export interface CitasTable{
     id: number
     appointment_start_time: Date
     response: string
     type: string
-    state: string
+    status: string
 }
 
 export interface AppointmentDetail {
@@ -12,7 +14,7 @@ export interface AppointmentDetail {
     appointment_start_time: string;
     created_date: string;
     response: string;
-    state: string;
+    status: string;
     type: string;
     doctor_document_type: string;
     doctor_firstname: string;
@@ -26,7 +28,7 @@ export interface AppointmentDetail {
     appointment_start_time: string;
     created_date: string;
     response: string;
-    state: string;
+    status: string;
     type: string;
     patient_document_type: string;
     patient_firstname: string;
@@ -34,10 +36,25 @@ export interface AppointmentDetail {
     patient_lastname: string;
     patient_tel: string;
   }
+   export interface AppointmentPatientrDetail {
+    id: number;
+    slot: string;
+    appointment_start_time: string;
+    created_date: string;
+    response: string;
+    status: string;
+    type: string;
+    doctor_document_type: string;
+    doctor_firstname: string;
+    doctor_identity_number: string;
+    doctor_lastname: string;
+    doctor_tel: string;
+  }
   export interface CreateCita{
     slot: number
-    appointmentStartTime: Date,
+    appointmentStartTime: string,
     type: number,
     doctorId: number
     userId: number
+    doctor?: DoctorAvailabilityInfo
   } 

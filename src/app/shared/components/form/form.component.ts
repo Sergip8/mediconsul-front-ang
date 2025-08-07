@@ -16,15 +16,22 @@ export class FormComponent implements OnInit {
   @Input() showCancelButton: boolean = true;
   @Input() sectionTitle: string = '';
   @Input() nestingLevel: number = 0;
+  @Input() hiddenFields: string[] = ['id']; // Lista de campos que no se muestran
 
   @Output() formSubmit = new EventEmitter<any>();
   @Output() formCancel = new EventEmitter<boolean>();
  
-
   form: FormGroup;
   fieldKeys: string[] = [];
   nestedObjects: { [key: string]: any } = {};
-  formValue: any
+  formValue: any;
+  
+  // Para campos de búsqueda
+  searchResults: { [key: string]: any[] } = {};
+  isSearching: { [key: string]: boolean } = {};
+  showSearchResults: { [key: string]: boolean } = {};
+  searchTimeouts: { [key: string]: any } = {};
+  
   // Field types supported
   fieldTypes = {
     TEXT: 'text',
@@ -40,36 +47,132 @@ export class FormComponent implements OnInit {
     OBJECT: 'object',
     TEL: 'tel',
     URL: 'url',
-    FILE: 'file'
+    FILE: 'file',
+    SEARCH: 'search' // Nuevo tipo
   };
 
   constructor(private fb: FormBuilder) { 
     this.form = this.fb.group({});
   }
+  
   @ViewChildren(FormComponent) nestedForms!: QueryList<FormComponent>;
+  
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm(): void {
-    
     this.fieldKeys = Object.keys(this.formConfig);
     
     for (const key of this.fieldKeys) {
       const fieldConfig = this.formConfig[key];
-      const fieldValue = this.formData && this.formData[key] !== undefined ? this.formData[key] : '';
+      const fieldValue = this.formData && this.formData[key] !== undefined ? this.formData[key] : ""
+      console.log(fieldValue)
       
       if (this.isNestedObject(fieldConfig)) {
         this.nestedObjects[key] = {
           config: fieldConfig,
-          data: fieldValue || {}
+          data: fieldValue
         };
       } else {
         const validators = this.getValidators(fieldConfig);
-        if(key !== 'sectionTitle')
-        this.form.addControl(key, new FormControl({value:fieldValue, disabled: fieldConfig.disabled }, validators));
+        if(key !== 'sectionTitle' && !this.hiddenFields.includes(key)) {
+          this.form.addControl(key, new FormControl({value: fieldValue, disabled: fieldConfig.disabled }, validators));
+          
+          // Inicializar propiedades de búsqueda si es un campo search
+          if (fieldConfig.type === this.fieldTypes.SEARCH) {
+            this.searchResults[key] = [];
+            this.isSearching[key] = false;
+            this.showSearchResults[key] = false;
+            
+            // Agregar campo oculto para almacenar el objeto seleccionado completo
+            this.form.addControl(key + '_selected', new FormControl(null));
+            
+            // Suscribirse a cambios en el campo de búsqueda
+            this.form.get(key)?.valueChanges.subscribe(value => {
+              this.onSearchInputChange(key, value);
+            });
+          }
+        }
       }
     }
+  }
+  
+  // Método para manejar cambios en el input de búsqueda
+  onSearchInputChange(fieldKey: string, searchTerm: string): void {
+    // Limpiar timeout anterior
+    if (this.searchTimeouts[fieldKey]) {
+      clearTimeout(this.searchTimeouts[fieldKey]);
+    }
+    
+    // Si el término está vacío, limpiar resultados
+    if (!searchTerm || searchTerm.length < 2) {
+      this.searchResults[fieldKey] = [];
+      this.showSearchResults[fieldKey] = false;
+      this.form.get(fieldKey + '_selected')?.setValue(null);
+      return;
+    }
+    
+    // Debounce la búsqueda
+    this.searchTimeouts[fieldKey] = setTimeout(() => {
+      this.performSearch(fieldKey, searchTerm);
+    }, 300);
+  }
+  
+  // Realizar la búsqueda usando el callback
+  async performSearch(fieldKey: string, searchTerm: string): Promise<void> {
+    const fieldConfig = this.formConfig[fieldKey];
+    
+    if (!fieldConfig.apiCall || typeof fieldConfig.apiCall !== 'function') {
+      console.error(`No apiCall function provided for search field: ${fieldKey}`);
+      return;
+    }
+    
+    this.isSearching[fieldKey] = true;
+    
+    try {
+      const results = await fieldConfig.apiCall(searchTerm);
+      this.searchResults[fieldKey] = Array.isArray(results) ? results : [];
+      this.showSearchResults[fieldKey] = true;
+    } catch (error) {
+      console.error(`Error searching for ${fieldKey}:`, error);
+      this.searchResults[fieldKey] = [];
+      this.showSearchResults[fieldKey] = false;
+    } finally {
+      this.isSearching[fieldKey] = false;
+    }
+  }
+  
+  // Seleccionar un resultado de búsqueda
+  selectSearchResult(fieldKey: string, result: any): void {
+    const fieldConfig = this.formConfig[fieldKey];
+    
+    // Determinar qué propiedad mostrar como texto
+    const displayProperty = fieldConfig.displayProperty || 'id';
+    const valueProperty = fieldConfig.valueProperty || 'id';
+    
+    // Establecer el texto mostrado
+    this.form.get(fieldKey)?.setValue(result[displayProperty] || result.name || result.label || result.toString());
+    
+    // Guardar el objeto completo o el valor específico
+    this.form.get(fieldKey )?.setValue(result.id);
+    
+    // Ocultar resultados
+    this.showSearchResults[fieldKey] = false;
+    this.searchResults[fieldKey] = [];
+  }
+  
+  // Limpiar selección de búsqueda
+  clearSearchSelection(fieldKey: string): void {
+    this.form.get(fieldKey)?.setValue('');
+    this.form.get(fieldKey + '_selected')?.setValue(null);
+    this.searchResults[fieldKey] = [];
+    this.showSearchResults[fieldKey] = false;
+  }
+  
+  // Obtener el valor seleccionado para un campo de búsqueda
+  getSearchSelectedValue(fieldKey: string): any {
+    return this.form.get(fieldKey + '_selected')?.value;
   }
   
   isNestedObject(obj: any): boolean {
@@ -80,8 +183,7 @@ export class FormComponent implements OnInit {
     }
 
     for (const key in obj) {
- 
-      if (key === 'sectionTitle' || key.endsWith('id')) continue;
+      if (key === 'sectionTitle' || this.hiddenFields.includes(key)) continue;
      
       const value = obj[key];
       if (this.isObject(value) && (value.label !== undefined || value.type !== undefined)) {
@@ -126,7 +228,6 @@ export class FormComponent implements OnInit {
     
     if (!fieldConfig.type) {
       // Try to infer type from field name if not specified
-      
       if (key.toLowerCase().includes('email')) {
         return this.fieldTypes.EMAIL;
       } else if (key.toLowerCase().includes('password')) {
@@ -164,6 +265,7 @@ export class FormComponent implements OnInit {
   getNestedObjectKeys(): string[] {
     return Object.keys(this.nestedObjects);
   }
+  
   private isSubmitting = false; 
   onSubmit(): void {
     console.log("onsubmit ejecutado")
@@ -180,16 +282,30 @@ export class FormComponent implements OnInit {
       nestedForm.onSubmit();
     });
 
-
     const nestedValues: { [key: string]: any } = {};
     this.nestedForms.forEach((nestedForm, index) => {
       const key = this.getNestedObjectKeys()[index];
       nestedValues[key] = nestedForm.form.value;
     });
 
+    // Procesar campos de búsqueda
+    const processedFormValue = { ...this.form.value };
+    
+    for (const key of this.fieldKeys) {
+      const fieldConfig = this.formConfig[key];
+      if (fieldConfig.type === this.fieldTypes.SEARCH) {
+        const selectedValue = this.getSearchSelectedValue(key);
+        if (selectedValue) {
+          const valueProperty = fieldConfig.valueProperty || 'id';
+          processedFormValue[key] = selectedValue[valueProperty] || selectedValue;
+        }
+        // Remover el campo auxiliar del resultado final
+        delete processedFormValue[key + '_selected'];
+      }
+    }
    
-    this.formValue = { ...this.form.value, ...nestedValues };
-    this.formValue = Object.assign({}, this.formData, this.formValue)
+    this.formValue = { ...processedFormValue, ...nestedValues };
+    this.formValue = Object.assign({}, this.formData, this.formValue);
    
     this.formSubmit.emit(this.formValue);
     this.isSubmitting = false; 
@@ -245,11 +361,12 @@ export class FormComponent implements OnInit {
     
     return 'Invalid value';
   }
+  
   hasFormChanged(): boolean {
     // Check if main form fields have changed
     for (const key of this.fieldKeys) {
-      // Skip nested objects and special fields
-      if (this.nestedObjects[key] || key === 'sectionTitle' || key.endsWith('id')) {
+      // Skip nested objects, special fields, and hidden fields
+      if (this.nestedObjects[key] || key === 'sectionTitle' || this.hiddenFields.includes(key) || key.endsWith('_selected')) {
         continue;
       }
       
@@ -257,7 +374,7 @@ export class FormComponent implements OnInit {
       if (control) {
         // Compare current value with original value
         const currentValue = control.value;
-        const originalValue = this.formData[key] !== undefined ? this.formData[key] : '';
+        const originalValue = this.formData?.[key] !== undefined ? this.formData[key] : '';
         
         // Handle different types of comparisons
         if (typeof currentValue === 'object') {

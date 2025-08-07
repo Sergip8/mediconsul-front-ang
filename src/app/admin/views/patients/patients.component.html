@@ -7,6 +7,7 @@
       [loading]="loading"
       [title]="'Patient Appointments'"
       [pagination]="pagination"
+      (create)="onCreate()"
       (rowClick)="onPatientClick($event)"
       (sortChange)="onSortChange($event)">
     </app-table>
@@ -17,8 +18,8 @@
 
 <app-modal [isOpen]="isModalOpen" [title]="modalTitle" (closeModal)="closeModal()">
   <app-loading *ngIf="loading"></app-loading>
+  @if (patientFormConfig && isModalOpen) {
   <div class="p-6 ">
-    @if (patientData && patientFormConfig) {
         <h1 class="text-2xl font-bold text-blue-900 mb-6"></h1>
         <div class="max-w-3xl mx-auto p-6">
           <h2 class="text-2xl font-bold text-sky-900 mb-6">Patient Information</h2>
@@ -33,9 +34,9 @@
         
         </div>
     
-      }
-      
+        
       </div>
+    }
  
   </app-modal>
    
