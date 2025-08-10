@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Patient, PatientTable, SearchParameters, PaginatedRequest } from '../../models/patient';
 import {environment} from "../../../environments/environment";
-import { Doctor, DoctorAvailabilityPayload, DoctorAvailabilityRequest } from '../../models/doctor';
+import { Doctor, DoctorAvailabilityPayload, DoctorAvailabilityRequest, DoctorRegisterForm, LocationData } from '../../models/doctor';
+import { Observable, tap } from 'rxjs';
+import { DoctorRegister } from '../../public/views/auth/auth-models';
 
 const baseUrl = environment.baseUrl
 
@@ -32,6 +34,15 @@ export class DoctorService {
         createDoctor(doctor: Doctor) {
           return this.http.post<any>(baseUrl+'CreateDoctor', doctor )
         }
+
+
+  registerDoctor(formData: DoctorRegister): Observable<any> {
+    const url = `${baseUrl}RegisterDoctor`;
+    return this.http.post(url, formData);
+  }
+  
+
+  
 }
 
 

@@ -1,0 +1,232 @@
+/* doctor-register.component.css */
+
+/* Base Styles */
+.medical-bg {
+    min-height: 100vh;
+    position: relative;
+}
+
+.medical-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+/* Glass Effect */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+/* Pulse Animation */
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.33);
+        opacity: 1;
+    }
+    80%, 100% {
+        opacity: 0;
+    }
+}
+
+.pulse-ring {
+    animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Form Styles */
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    border: 2px solid #e1f5fe;
+    border-radius: 12px;
+    font-size: 16px;
+    background: white;
+    color: #1e3a8a;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+   
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.form-group select {
+    appearance: none;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="rgb(59, 130, 246)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 20px;
+}
+
+.form-group select option {
+    color: #1e3a8a;
+    padding: 10px;
+}
+
+/* Error Styles */
+.form-group input.border-red-500,
+.form-group select.border-red-500 {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-left: 4px;
+    font-weight: 500;
+}
+
+/* Location Dropdown */
+.location-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e1f5fe;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.location-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #1e3a8a;
+}
+
+.location-item:hover {
+    background-color: #eff6ff;
+}
+
+.location-item:last-child {
+    border-bottom: none;
+}
+
+/* Selected Location */
+.selected-location {
+    margin-bottom: 1rem;
+}
+
+/* Button Styles */
+.btn-medical {
+    width: 100%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.btn-medical:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.btn-medical:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.btn-medical:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Loading Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .glass-effect {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 12px 16px 12px 44px;
+        font-size: 14px;
+    }
+    
+    .btn-medical {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .pulse-ring {
+        animation: none;
+    }
+    
+    .btn-medical:hover,
+    .form-group input:focus,
+    .form-group select:focus {
+        transform: none;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+.btn-medical:focus-visible,
+.form-group input:focus-visible,
+.form-group select:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.location-item:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: -2px;
+    background-color: #eff6ff;
+}

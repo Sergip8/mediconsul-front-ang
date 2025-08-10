@@ -48,7 +48,6 @@ export class PublicHeaderComponent implements OnInit, OnDestroy {
   }
  
   menuItems = [
-    { name: 'Home', link: '/home' },
     { name: 'Services', link: '/services' },
     { name: 'Doctors', link: '/doctors' },
     { name: 'Appointments', link: '/appointments' },

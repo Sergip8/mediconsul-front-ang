@@ -8,6 +8,7 @@ import { ValidationErrorComponent } from '../../../shared/components/validation-
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { SigninComponent } from './signin/signin.component';
+import { DoctorSignupComponent } from './doctor-signup/doctor-signup.component';
 
 
 
@@ -15,7 +16,8 @@ import { SigninComponent } from './signin/signin.component';
 @NgModule({
   declarations: [
     SigninComponent,
-    SignupComponent
+    SignupComponent,
+    DoctorSignupComponent
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { SigninComponent } from './signin/signin.component';
   exports: [
     SigninComponent,
     SignupComponent,
+    DoctorSignupComponent
   ],
  
 })

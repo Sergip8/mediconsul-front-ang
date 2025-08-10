@@ -8,6 +8,8 @@ import { AppointmentService } from '../../../_core/services/citas.service';
 import { ModalComponent } from "../modal/modal.component";
 import { ButtonComponent } from "../../button/button.component";
 import { Router } from '@angular/router';
+import { CommonService } from '../../../_core/services/common.service';
+import { AlertType } from '../alert/alert.type';
 
 
 interface TimeSlot {
@@ -35,17 +37,23 @@ export class DoctorAvailabilityComponent implements OnChanges  {
   @Input() existingAppointments: CitaDoctor[] = [];
   @Input() startHour = 8;
   @Input() endHour = 18;
+  @Input() slot = 20;
   @Output() slotSelected = new EventEmitter<CreateCita>();
   
   daySlots: {[dayId: number]: TimeSlot[]} = {};
   slc = 10;
   size = 0
   btnHide = "Mostrar más"
-  slot = 20
+
   isModalOpen = false
   modalTitle = ""
   citaSelected!: CreateCita
-  constructor(private authService: AuthService, private citaService: AppointmentService, private route: Router){}
+  constructor(private authService: AuthService,
+     private citaService: AppointmentService,
+     private commonService: CommonService,
+      private router: Router){
+        
+      }
   
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visibleDays'] || changes['existingAppointments'] || changes['doctorId']) {
@@ -119,12 +127,12 @@ export class DoctorAvailabilityComponent implements OnChanges  {
   
   handleSelectSlot(day: DayInfo, slot: TimeSlot): void {
     const roles = this.authService.getRole()
+    const userId = this.authService.getUserId()
+    if(userId){
     if(roles)
       if(roles.includes("PATIENT")){
-        const userId = this.authService.getUserId()
         const localTime = new Date(slot.startTime).toLocaleString("sv-SE", { timeZone: "America/Bogota" }).replace(" ", "T");
         this.isModalOpen = true
-        if(userId){
          
           this.modalTitle = "desea agendar la cita"
           this.citaSelected = {
@@ -137,12 +145,17 @@ export class DoctorAvailabilityComponent implements OnChanges  {
          
           //this.createAppointment(cita)
 
+          
         }
-
-      }
-      else{
-
-      }
+      }else {
+              this.commonService.updateAlert({
+                message: 'Debes iniciar sesión para solicitar una cita',
+                alertType: AlertType.Danger,
+                show: true
+              });
+              this.router.navigate(['/signin']);
+            }
+   
   }
   showSlots() {
   

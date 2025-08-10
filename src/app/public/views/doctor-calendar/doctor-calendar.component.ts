@@ -7,10 +7,13 @@ import { LoadingComponent } from '../../../shared/components/loading/loading';
 import { finalize } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { specializationsWithSlots } from '../../../shared/utils/constans';
+import { Router } from '@angular/router';
+import { AlertType } from '../../../shared/components/alert/alert.type';
+import { CommonService } from '../../../_core/services/common.service';
 
 @Component({
   selector: 'app-doctor-calendar',
-  imports: [CalendarComponent, LoadingComponent, NgIf],
+  imports: [CalendarComponent],
   templateUrl: './doctor-calendar.component.html',
   styleUrl: './doctor-calendar.component.css'
 })
@@ -19,7 +22,9 @@ export class DoctorCalendarComponent implements OnInit {
   appointmentData: (AppointmentDoctorDetail[] | null) = null
   loading = false
   slot = 20
-  constructor(private appointmentService: AppointmentService, private authService: AuthService){}
+
+    
+  constructor(private appointmentService: AppointmentService, private authService: AuthService, private router: Router, private commonService: CommonService){}
   ngOnInit(): void {
 const startDate = new Date(this.startDate);
   const endDate = new Date(startDate);
@@ -43,6 +48,14 @@ const startDate = new Date(this.startDate);
         error: e => console.log(e)
       })
 
+    }
+    else{
+      this.commonService.updateAlert({
+        message: 'Debes iniciar sesión',
+        alertType: AlertType.Danger,
+        show: true
+      });
+      this.router.navigate(['/signin']);
     }
   }
 getDateRange(dateRange: DateRange){

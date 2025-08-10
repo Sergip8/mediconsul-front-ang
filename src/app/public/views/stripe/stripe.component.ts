@@ -191,7 +191,7 @@ export class StripePaymentComponent implements OnInit {
       this.citaRecibida = navigation.extras.state['cita'];
       console.log('Datos de la cita recibidos para el pago:', this.citaRecibida);
     }
-    this.stripePublicKey = stripeService.stripeKey;
+
     
     this.paymentForm = this.fb.group({
       email: [this.authService.getEmail(), [Validators.required, Validators.email]],

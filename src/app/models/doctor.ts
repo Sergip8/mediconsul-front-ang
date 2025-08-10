@@ -2,7 +2,7 @@ import { InformacionPersonal } from "./patient";
 
 export class Doctor {
     id: number = 0;
-    document_type: string = "Cédula"
+    document_type: string = "ID_Card"
     firstname: string = "";
     identity_number: string = "";
     lastname: string = "";
@@ -16,9 +16,9 @@ export class InformacionProfesional{
         id: number = 0
         hire_date: string = "2020-01-01";
         professional_number: string = ""
-        work_shift: string = ""
-        specialization: number = 0
-        consultorios_id: number = 0
+        work_shift: string = "AM"
+        specialization: number = 1
+        consultorios_id: number = 1
 }
 
 export interface DoctorAvailabilityInfo {
@@ -31,13 +31,28 @@ export interface DoctorAvailabilityInfo {
     address: string;
     speName: string
     unitPrice: number
+    appointmentSlot: number
     currency: string
-    citas: CitaDoctor[]; 
+    modality: AppointmentModality
+    citas: CitaDoctor[];
+    locations: DoctorLocations[]; 
   }
   export interface CitaDoctor {
     slot: number; // short en C# se convierte a number en TypeScript
     appointment_start_time: Date; // DateTime en C# se convierte a Date en TypeScript
     state: string;
+  }
+  export interface DoctorLocations{
+    id: number;
+    latitude: number;
+    longitude: number;
+    direction: string;
+    neighbourhood: string;
+    reference: string;
+    locality: string;
+    city: string;
+    postalCode: string | null;
+    country: string;
   }
   export interface DoctorAvailabilityRequest {
     doctores: DoctorAvailabilityInfo[]; // List<DoctorvailabilityInfo> en C# se convierte a un array en TypeScript
@@ -57,5 +72,39 @@ export interface DoctorAvailabilityInfo {
     identity_number: string
     phone: string
 
+}
+ export interface DoctorMainRegister{
+    firstname: string
+    lastname: string
+    phone: string
+
+}
+export enum AppointmentModality {
+    Virtual = "Virtual",
+    InPerson = "InPerson",
+    Hybrid = "Hybrid"
+} 
+export interface DoctorRegisterForm {
+    firstname: string;
+    lastname: string;
+    phone: string;
+    professional_number: string;
+    latitude: number;
+    longitude: number;
+    speciality: string;
+    neighbourhood: string;
+    locality: string;
+    city: string;
+    email: string;
+    password: string;
+}
+export interface LocationData {
+    id: number;
+    address: string;
+    neighbourhood: string;
+    locality: string;
+    city: string;
+    latitude: number;
+    longitude: number;
 }
  

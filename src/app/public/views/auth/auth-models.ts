@@ -1,7 +1,9 @@
+import { Doctor, DoctorLocations, DoctorMainRegister, DoctorTable, InformacionProfesional } from "../../../models/doctor"
+
 export interface RegistrationResponse{
     password: string  
     email: string  
-  
+    role?: string
 }
 export interface AuthRequest{
     data: UserRequest | LoginRequest
@@ -30,4 +32,10 @@ export enum Role{
     DOCTOR = "DOCTOR",
     EMPLOYEE = "EMPLOYEE"
 
+}
+export interface DoctorRegister{
+    doctor: DoctorMainRegister
+    profesionalInfo: InformacionProfesional
+    location: DoctorLocations
+    doctorRegister: RegistrationResponse
 }

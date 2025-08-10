@@ -1,0 +1,249 @@
+<!-- doctor-register.component.html -->
+<div class="medical-bg min-h-screen">
+    <div class="flex justify-center items-center min-h-[70vh] p-4">
+        <div class="w-full max-w-2xl">
+            <div class="glass-effect rounded-2xl shadow-2xl p-8">
+                <!-- Header -->
+                <div class="text-center mb-6">
+                    <div class="relative inline-flex items-center justify-center w-16 h-16 mb-4">
+                        <div class="absolute inset-0 bg-blue-400 rounded-full pulse-ring"></div>
+                        <div class="relative bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center">
+                            <i class="bi bi-person-plus text-2xl text-blue-600"></i>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-blue-900 mb-2">
+                        Registro de Doctor
+                    </h2>
+                    <p class="text-sm text-blue-600">Completa tu información profesional</p>
+                </div>
+
+                <!-- Registration Form -->
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                    
+                    <!-- Personal Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- First Name -->
+                        <div class="form-group">
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    formControlName="firstname"
+                                    placeholder="Nombre" 
+                                    required 
+                                    [class.border-red-500]="registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched"
+                                />
+                                <span class="absolute top-3.5 left-4 text-blue-500">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" *ngIf="getFieldError('firstname')">
+                                {{ getFieldError('firstname') }}
+                            </div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="form-group">
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    formControlName="lastname"
+                                    placeholder="Apellido" 
+                                    required 
+                                    [class.border-red-500]="registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched"
+                                />
+                                <span class="absolute top-3.5 left-4 text-blue-500">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" *ngIf="getFieldError('lastname')">
+                                {{ getFieldError('lastname') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <div class="relative">
+                                <input 
+                                    type="tel" 
+                                    formControlName="phone"
+                                    placeholder="Teléfono (10 dígitos)" 
+                                    required 
+                                    [class.border-red-500]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
+                                />
+                                <span class="absolute top-3.5 left-4 text-blue-500">
+                                    <i class="bi bi-telephone"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" *ngIf="getFieldError('phone')">
+                                {{ getFieldError('phone') }}
+                            </div>
+                        </div>
+
+                        <!-- Professional Number -->
+                        <div class="form-group">
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    formControlName="professional_number"
+                                    placeholder="Número profesional" 
+                                    required 
+                                    [class.border-red-500]="registerForm.get('professional_number')?.invalid && registerForm.get('professional_number')?.touched"
+                                />
+                                <span class="absolute top-3.5 left-4 text-blue-500">
+                                    <i class="bi bi-card-text"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" *ngIf="getFieldError('professional_number')">
+                                {{ getFieldError('professional_number') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <input 
+                                type="email" 
+                                formControlName="email"
+                                placeholder="Correo electrónico" 
+                                required 
+                                [class.border-red-500]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                            />
+                            <span class="absolute top-3.5 left-4 text-blue-500">
+                                <i class="bi bi-envelope-at"></i>
+                            </span>
+                        </div>
+                        <div class="error-message" *ngIf="getFieldError('email')">
+                            {{ getFieldError('email') }}
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <input 
+                                [type]="passwordVisible ? 'text' : 'password'" 
+                                formControlName="password"
+                                placeholder="Contraseña (mínimo 8 caracteres)" 
+                                required 
+                                [class.border-red-500]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                            />
+                            <span class="absolute top-3.5 left-4 text-blue-500">
+                                <i class="bi bi-shield-lock"></i>
+                            </span>
+                            <button 
+                                type="button" 
+                                class="absolute top-3.5 right-4 text-blue-500 hover:text-blue-700"
+                                (click)="togglePasswordVisibility()"
+                            >
+                                <i [class]="passwordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" *ngIf="getFieldError('password')">
+                            {{ getFieldError('password') }}
+                        </div>
+                    </div>
+
+                    <!-- Speciality -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <select 
+                                formControlName="speciality"
+                                required 
+                                [class.border-red-500]="registerForm.get('speciality')?.invalid && registerForm.get('speciality')?.touched"
+                            >
+                                <option value="" disabled>Selecciona tu especialidad</option>
+                                <option *ngFor="let speciality of specialities" [value]="speciality.id">
+                                    {{ speciality.specialization }}
+                                </option>
+                            </select>
+                            <span class="absolute top-3.5 left-4 text-blue-500">
+                                <i class="bi bi-heart-pulse"></i>
+                            </span>
+                        </div>
+                        <div class="error-message" *ngIf="getFieldError('speciality')">
+                            {{ getFieldError('speciality') }}
+                        </div>
+                    </div>
+
+                    <!-- Location Search -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                formControlName="location"
+                                (input)="onLocationSearch($event)"
+                                (blur)="closeLocationDropdown()"
+                                placeholder="Busca tu ubicación..." 
+                                required 
+                                autocomplete="off"
+                                [class.border-red-500]="registerForm.get('location')?.invalid && registerForm.get('location')?.touched"
+                            />
+                            <span class="absolute top-3.5 left-4 text-blue-500">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
+                            <div class="absolute top-3.5 right-4 text-blue-500" *ngIf="isLoadingLocation">
+                                <i class="bi bi-arrow-repeat animate-spin"></i>
+                            </div>
+                            
+                            <!-- Location Dropdown -->
+                            <div 
+                                class="location-dropdown"
+                                *ngIf="isLocationDropdownOpen && locationResults.length > 0"
+                            >
+                                <div 
+                                    *ngFor="let location of locationResults; trackBy: trackByLocation"
+                                    class="location-item"
+                                    (mousedown)="selectLocation(location)"
+                                >
+                                    <i class="bi bi-geo-alt-fill text-blue-500 mr-2"></i>
+                                    <span>{{ location.display_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="error-message" *ngIf="getFieldError('location')">
+                            {{ getFieldError('location') }}
+                        </div>
+                    </div>
+
+                    <!-- Selected Location Display -->
+                    <div class="selected-location" *ngIf="selectedLocation">
+                        <div class="flex items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <i class="bi bi-check-circle-fill text-green-500 mr-2"></i>
+                            <span class="text-blue-700 text-sm">{{ selectedLocation?.display_name }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-medical mt-6" [disabled]="registerForm.invalid || !selectedLocation">
+                        <i class="bi bi-person-plus mr-2"></i>
+                        <span>Registrar Doctor</span>
+                    </button>
+                </form>
+
+                <!-- Login Link -->
+                <div class="text-sm text-center mt-6 pt-6 border-t border-blue-200">
+                    <p class="text-blue-700">
+                        ¿Ya tienes cuenta? 
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-300">
+                            Inicia sesión aquí
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Medical Footer -->
+                <div class="text-center mt-6">
+                    <div class="flex justify-center space-x-4 text-blue-500">
+                        <i class="bi bi-shield-check text-lg" title="Seguro"></i>
+                        <i class="bi bi-clock text-lg" title="24/7"></i>
+                        <i class="bi bi-people text-lg" title="Equipo médico"></i>
+                    </div>
+                    <p class="text-xs text-blue-600 mt-2">Registro seguro para profesionales de la salud</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,7 +22,7 @@ export interface PaymentIntentRequest {
 })
 export class StripePaymentService {
   private apiUrl = environment.baseUrl
-    stripeKey = environment.stripePublicKey
+
   constructor(private http: HttpClient) {}
 
   createPaymentIntent(paymentData: PaymentIntentRequest): Observable<PaymentIntent> {

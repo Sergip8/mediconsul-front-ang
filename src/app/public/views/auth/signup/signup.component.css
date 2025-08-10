@@ -1,22 +1,56 @@
-input{
-box-sizing: border-box;
-margin: 0;
-font-family: inherit;
-display: block;
-width: 100%;
-font-weight: 400;
-color: #495057;
-background-color: #fff;
-background-clip: padding-box;
-border: .06667rem solid #dcdfe3;
-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-height: calc(1.5em + 1.20134rem);
-padding: .534rem .8rem;
-font-size: 1rem;
-line-height: 1.5;
-border-radius: .2rem;
-margin-bottom: 0 !important;
-margin-top: 1.0rem !important;
-
-
-}
+  .medical-bg {
+           
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group input {
+            @apply w-full px-12 py-3 border-2 border-blue-200 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/80;
+        }
+        
+        .form-group input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+        
+        .btn-medical {
+            @apply w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl;
+        }
+        
+        .btn-google {
+            @apply text-sm border-2 border-blue-200 px-5 py-3 rounded-lg w-full hover:bg-blue-50 hover:border-blue-300 bg-white/80 backdrop-blur-sm transition-all ease-in-out duration-300 text-blue-700 font-medium;
+        }
+        
+        .medical-icon {
+            color: #2563eb;
+        }
+        
+        .password-strength {
+            @apply text-xs mt-1 px-3 py-1 rounded-full text-center font-medium transition-all duration-300;
+        }
+        
+        .strength-weak { @apply bg-red-100 text-red-600; }
+        .strength-medium { @apply bg-yellow-100 text-yellow-600; }
+        .strength-strong { @apply bg-green-100 text-green-600; }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        

@@ -23,7 +23,7 @@
        <div class="flex items-center space-x-4 order-1 md:order-3">
          @if (userState$ | async; as emailRoles) {
         @if (!emailRoles?.roles) {
-            <div>
+            <div class="flex gap-3">
               <a  [routerLink]="commonService.prepareRoute(publicRoutes.Signin)"
                  class="text-blue-700 hover:text-blue-900 px-4 py-2 text-sm font-medium rounded-md transition duration-150">
                 Sign In
@@ -32,7 +32,11 @@
                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md shadow-sm transition duration-150">
                 Sign Up
               </a>
-
+              <a [routerLink]="commonService.prepareRoute(publicRoutes.DoctorSignup)"
+                 class="bg-blue-300 hover:bg-blue-700 text-blue-800 px-4 py-2 text-sm font-medium rounded-md shadow-sm transition duration-150">
+                Registrarse como Especialista
+              </a>
+           
             </div>
             
           }@else {
